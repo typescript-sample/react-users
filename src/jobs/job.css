@@ -1,0 +1,13 @@
+.view-container .job-view{
+    padding: 10px 40px;
+    margin: 50px;
+    border: 1px solid #b1a8a8;
+    width: auto;
+    height: 100%;
+}
+.view-container .job-view h2,h1{
+    padding: 20px 0;
+}
+.job-view .job-skill{
+    padding-bottom: 20px;
+}

@@ -1,0 +1,47 @@
+.card-user {
+  height: 100%;
+  width: 280px !important;
+  border: 1px solid #e4e5e7;
+  padding-top: 0px !important;
+}
+
+.card-user .avatar-user {
+  width: 24px;
+  height: 24px;
+}
+
+.card-user .user-carousel-container {
+  width: 280px;
+  height: 160px;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+}
+
+.user-carousel-container .avatar-user-alter {
+  max-width: 280px;
+  height: 160px;
+}
+
+
+.info-wrapper {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+}
+
+.user-name {
+  margin-left: 10px;
+}
+
+.user-name a {
+  color: black;
+}
+
+.user-name a:hover {
+  color: black;
+}
+
+.user-desciption {
+  padding: 10px;
+}

@@ -1,0 +1,164 @@
+{
+  "config": {
+    "FormatTexts": [
+      {
+        "value": false,
+        "text": "Select Format"
+      },
+      {
+        "value": "h1",
+        "text": "Title 1"
+      },
+      {
+        "value": "h2",
+        "text": "Title 2"
+      },
+      {
+        "value": "h3",
+        "text": "Title 3"
+      },
+      {
+        "value": "h4",
+        "text": "Title 4"
+      },
+      {
+        "value": "h5",
+        "text": "Title 5"
+      },
+      {
+        "value": "h6",
+        "text": "Subtitle"
+      },
+      {
+        "value": "hp",
+        "text": "Paragraph"
+      },
+      {
+        "value": "pre",
+        "text": "Preformatted"
+      }
+    ],
+    "FormatFonts": [
+      {
+        "value": false,
+        "text": "Select font"
+      },
+      {
+        "value": "Arial",
+        "text": "Arial"
+      },
+      {
+        "value": "Arial Black",
+        "text": "Arial Black"
+      },
+      {
+        "value": "Courier New",
+        "text": "Courier New"
+      },
+      {
+        "value": "Times New Roman",
+        "text": "Times New Roman"
+      }
+    ],
+    "Formats": [
+      {
+        "value": "",
+        "text": ""
+      },
+      {
+        "value": "",
+        "text": ""
+      },
+      {
+        "value": "",
+        "text": ""
+      },
+      {
+        "value": "",
+        "text": ""
+      },
+      {
+        "value": "",
+        "text": ""
+      }
+    ],
+    "FormatSizes": [
+      {
+        "value": false,
+        "text": "- size -"
+      },
+      {
+        "value": "1",
+        "text": "Very small"
+      },
+      {
+        "value": "2",
+        "text": "A bit small"
+      },
+      {
+        "value": "3",
+        "text": "Normal"
+      },
+      {
+        "value": "4",
+        "text": "Medium-large"
+      },
+      {
+        "value": "5",
+        "text": "Big"
+      },
+      {
+        "value": "6",
+        "text": "Very big"
+      },
+      {
+        "value": "7",
+        "text": "Maximum"
+      }
+    ],
+    "FormatBackgroundColors": [
+      {
+        "value": false,
+        "text": "Select Background"
+      },
+      {
+        "value": "rgb(255, 0, 0)",
+        "text": "Red"
+      },
+      {
+        "value": "rgb(0, 0, 255)",
+        "text": "Blue"
+      },
+      {
+        "value": "rgb(0, 128, 0)",
+        "text": "Green"
+      },
+      {
+        "value": " rgb(0, 0, 0)",
+        "text": "Black"
+      }
+    ],
+    "FormatColors": [
+      {
+        "value": false,
+        "text": "Select Color"
+      },
+      {
+        "value": "#ff0000",
+        "text": "Red"
+      },
+      {
+        "value": "#0000ff",
+        "text": "Blue"
+      },
+      {
+        "value": "#008000",
+        "text": "Green"
+      },
+      {
+        "value": "#000000",
+        "text": "Black"
+      }
+    ]
+  }
+}

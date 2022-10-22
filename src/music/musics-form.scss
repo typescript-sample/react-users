@@ -1,0 +1,305 @@
+.music-card {
+    width: 100% !important;
+    border-bottom: none !important;
+    padding: 10px;
+
+    .music-border-card {
+        padding: 20px;
+        width: 100% !important;
+        background-color: #181818;
+        border-radius: 10px;
+        position: relative;
+
+        &:hover {
+            background-color: #333131;
+        }
+
+        &:hover .btnPlaying {
+            display: block;
+        }
+
+        .img-card {
+            border-radius: 5px;
+            padding-top: 100%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: top center;
+
+        }
+
+        .playlist {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #5a5a5a;
+
+            svg {
+                margin-top: -100%;
+                font-size: 50px;
+            }
+        }
+
+        .img-name {
+            cursor: pointer;
+            font-size: 18px;
+            padding-top: 20px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+        }
+
+        .img-singer {
+            padding-top: 10px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            padding-bottom: 10px;
+        }
+
+        .btnPlaying {
+            position: absolute;
+            bottom: 100px;
+            right: 15px;
+            display: none;
+        }
+    }
+}
+
+.avatar-playing {
+    padding: 20px;
+    display: flex;
+    min-width: 250px;
+    color: #e7e6e6;
+
+    .avatar-playing-img {
+        width: 80px;
+        height: 80px !important;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: top center;
+        border-radius: 3px;
+    }
+
+    .avatar-playing-info {
+        display: flex;
+        justify-content: center;
+        flex-flow: column;
+        padding-left: 20px;
+
+        .playing-info-name {
+            font-size: 15px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+        }
+
+        .playing-info-singer {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+        }
+    }
+}
+
+
+.page-footer {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 101;
+    border-top: 1px solid #e7e6e6;
+}
+
+.music-modal-filter {
+    .delete-playlist {
+        display: flex;
+        justify-content: space-between;
+
+        .delete {
+            cursor: pointer;
+        }
+    }
+
+    input {
+        outline: none;
+        border: none;
+        background-color: #333131;
+    }
+
+    button {
+        outline: none;
+        border: none;
+        background-color: #5a5a5a;
+        margin: 20px 0;
+    }
+}
+
+.music-sidebar {
+    display: flex !important;
+    flex-flow: column;
+
+    hr {
+        border-color: #e7e6e6;
+    }
+}
+
+.view-container {
+    .backgound-color-container {
+        .list-result {
+            padding-bottom: 100px;
+        }
+
+        .detail-song {
+            display: flex;
+            padding: 50px 50px 25px 50px;
+
+            .detail-song-img {
+                flex: 1;
+                // width: 200px;
+                padding-top: 20%;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: top center;
+            }
+
+            .detail-song-name {
+                flex: 4;
+                color: #e7e6e6;
+                display: flex;
+                flex-flow: column;
+                justify-content: flex-end;
+                padding-left: 30px;
+
+                h1 {
+                    font-size: 65px;
+                    margin: 0;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                }
+
+                p {
+                    font-size: 18px;
+                    text-transform: uppercase;
+                    margin: 0;
+                    font-weight: bold;
+                }
+            }
+        }
+
+    }
+}
+
+.song-action {
+    padding: 20px 40px 20px 40px;
+}
+
+.list-song-playlist {
+    padding: 20px 20px 100px 20px;
+
+    .song {
+
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        border-radius: 5px;
+        padding: 10px 10px;
+
+        &:hover {
+            background-color: #333131;
+        }
+
+        .index-song {
+            flex: 0.5;
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .title-song {
+            cursor: pointer;
+            flex: 4.5;
+            display: flex;
+
+            .title-song-img {
+                width: 50px;
+                height: 50px;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: top center;
+            }
+
+            .title-song-name {
+                cursor: pointer;
+                display: flex;
+                flex-flow: column;
+                justify-content: center;
+
+                p {
+                    margin: 0;
+
+                    padding-left: 15px;
+                }
+
+            }
+
+        }
+
+        .album-song {
+            flex: 4;
+
+        }
+
+        .saved-song {
+            flex: 1;
+            font-size: 25px !important;
+
+            button {
+                cursor: pointer;
+                outline: none;
+                background-color: transparent;
+                border: 1px solid #e7e6e6;
+                padding: 0 10px;
+                font-size: 14px;
+                border-radius: 10px;
+                color: #e7e6e6;
+            }
+        }
+    }
+}
+
+.search-song {
+    width: 350px;
+    height: 40px;
+    display: flex;
+    border-radius: 20px;
+    background-color: #fff;
+    align-items: center;
+    overflow: hidden;
+    padding: 0 20px;
+    margin-left: 10px;
+
+    .inp-search-song {
+        input {
+            width: 250px;
+            outline: none;
+            border: none;
+            height: 100%;
+            background-color: #fff;
+        }
+    }
+
+    .btn-search-song {
+        button {
+            outline: none;
+            border: none;
+            height: 100%;
+            background-color: #fff;
+        }
+    }
+}

@@ -1,0 +1,44 @@
+b.b-article {
+  color: black;
+  font-size: 24px;
+  text-transform: uppercase;
+}
+
+label.col.s12.m12 {
+  text-align: center;
+}
+
+.filters {
+  display: flex;
+  height: max-content !important;
+  margin: 0 16px 0 16px;
+}
+
+.filters>.title {
+  font-style: normal;
+  font-size: 18px;
+  color: #4D4D4D;
+  margin-left: 0 !important;
+}
+
+.filter {
+  border: 1px solid #999999;
+  border-radius: 25px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  padding: 0 !important;
+  width: max-content !important;
+  display: flex;
+  height: max-content;
+}
+
+
+#articleForm {
+  height: max-content !important;
+}
+
+#articleForm>.row>.rating {
+  margin: 10px 16px 10px 16px !important;
+  padding: 10px !important;
+ 
+}

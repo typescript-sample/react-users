@@ -1,0 +1,16 @@
+[contenteditable=true]:empty:before{
+    content: attr(placeholder);
+    display: block; /* For Firefox */
+}
+
+.highlightMenu-arrowClip {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    clip: rect(10px 20px 20px 0);
+    margin-left: -10px;
+}
+
+#toolBar .material-icons {
+   font-size: 18px;
+}

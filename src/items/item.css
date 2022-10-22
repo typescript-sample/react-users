@@ -1,0 +1,142 @@
+.item-view-container {
+  height: 600px;
+}
+
+
+.item-view {
+  height: 100%;
+  display: flex;
+  font-size: 16px;
+  color: #008577;
+}
+
+.main-img {
+  width: 40%;
+  object-fit: contain;
+  margin: 0;
+  background-color: #ccc;
+  margin-right: 20px;
+}
+
+
+.main-img > div {
+  height: 100% !important;
+}
+
+.main-img > div > img {
+  height: 100% !important;
+  object-fit: contain;
+}
+
+.large-img {
+  z-index: 10;
+}
+
+.item-view>div {
+  margin-top: 40px;
+}
+
+.item-view>div>p {
+  margin-top: 20px;
+}
+
+
+
+.response-wrapper {
+  height: 80px;
+}
+
+.button-response {
+  font-size: 16px;
+  color: #fff;
+  background-color: #41978f;
+  border: unset;
+  height: 100%;
+  width: 300px;
+  border-radius: 20px;
+}
+
+.btn-item-response-page {
+  font-size: 14px;
+  color: #fff;
+  background-color: #41978f;
+  border: unset;
+  height: 100%;
+  width: 80px;
+  border-radius: 20px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+
+/* ///////////// */
+.item-slider {
+  margin-top: 70px;
+  position: relative;
+}
+
+.item-slider .item-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.item-slider .item-list img {
+  width: 50px;
+  height: 50px;
+  margin-top: 10px;
+  border: 1px solid #a2a6ac;
+  border-radius: 2px;
+}
+
+.item-slider .item-list .image-selected,
+.item-modal-body>form>div .image-selected {
+  border: 1px solid #e77600;
+  box-shadow: 0 0 3px 2px rgb(228 121 17 / 50%);
+}
+
+.item-slider .item-list img:hover {
+  border: 1px solid #e77600;
+  box-shadow: 0 0 3px 2px rgb(228 121 17 / 50%);
+}
+
+.item-list {
+  height: 300px;
+  overflow-y: hidden;
+  transition: all 0.5s ease-in-out 0s;
+}
+
+.item-slider .button-item-prev,
+.item-slider .button-item-next {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+.item-slider .button-item-prev i,
+.item-slider .button-item-next i {
+  font-size: 40px;
+}
+
+.item-slider .button-item-prev {
+  top: -30px;
+}
+
+.view-container .image-wrapper {
+  display: flex;
+}
+
+.view-container .image-wrapper img {
+  width: 60px;
+  height: 60px;
+  margin: 0px 5px 5px;
+}
+
+.item-modal-body>form>div {
+  padding-top: 10px;
+}
+
+.item-modal-body>form>div .slider {
+  height: 100%;
+}

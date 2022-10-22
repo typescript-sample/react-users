@@ -1,0 +1,106 @@
+.card-room {
+  padding-bottom: 30px;
+
+  .room-carousel-container {
+    border: 1px solid #999999;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .room-location {
+    color: black;
+    font-size: 15px;
+    margin: 0;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .room-title {
+    p {
+      margin: 0;
+      text-transform: lowercase;
+    }
+  }
+
+  .room-price {
+    p {
+      margin: 0;
+    }
+
+    color: black;
+    font-size: 15px;
+  }
+}
+
+.room-category {
+  margin-left: -15px;
+  margin-bottom: 40px;
+  display: flex;
+}
+
+.room-modal-filter {
+
+  .room-modal-filter-price {
+    .price-range {
+      display: flex;
+      justify-content: space-around;
+    }
+  }
+
+  .room-modal-filter-typeof {
+    .typeof-checkbox {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      label {
+        flex: 50%;
+        padding-bottom: 20px;
+      }
+    }
+  }
+}
+
+.room-view {
+  width: 1120px !important;
+  margin: auto;
+  color: black;
+  .room-view-title {
+    font-size: 25px;
+  }
+
+  .room-view-location-save {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #222222;
+    text-decoration-line: underline;
+    padding-bottom: 20px;
+  }
+
+  .room-view-picture {
+    ::-webkit-scrollbar {
+      width: 0 !important;
+      display: none;
+    }
+  }
+
+  .room-view-detail {
+    display: flex;
+    .room-view-detail-info {
+      flex: 2;
+      .detail-info-highlight{
+        font-size: 16px;
+        
+      }
+    }
+
+    .room-view-info-reserve {
+      flex: 1;
+    }
+
+  }
+}

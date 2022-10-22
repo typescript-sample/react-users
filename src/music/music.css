@@ -1,0 +1,27 @@
+.music-view-container {
+    position: relative;
+}
+
+.music-view-container>footer {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.music-view-container>footer>div {
+    display: flex;
+    width: 100%;
+
+    justify-content: space-around;
+}
+
+.music-view-container>footer>div>img {
+    width: 16px;
+    height: 16px;
+}
+
+.music-view-container>footer>div>.music-main-image {
+    width: 56px;
+    height: 56px;
+}
