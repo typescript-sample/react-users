@@ -68,9 +68,6 @@ export const itemModel: Attributes = {
 };
 
 export interface ItemService extends Service<Item, string, ItemFilter> {
-  // getItem(id: string | undefined): Promise<Item | null>;
-  // updateItem(item: Item, id: string): Promise<Item | null>;
-  // saveItem(item: Item): Promise<number>;
   fetchImageUploadedGallery(id: string): Promise<FileInfo[] | []>;
   deleteFile(id: string, fileUrl: string): Promise<number>;
   deleteFileYoutube(id: string, fileUrl: string): Promise<number>;

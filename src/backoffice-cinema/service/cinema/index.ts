@@ -52,10 +52,7 @@ export class CinemaClient extends Client<Cinema, string, CinemaFilter> implement
   }
 
   updateData = (id: string, data: FileInfo[]): Promise<number> => {
-    const body = {
-      data,
-      userId: id
-    };
-    return this.http.patch<number>(this.url + `/${id}/gallery`, body).catch(e => e);
+
+    return this.http.patch<number>(this.url + `/${id}/gallery`, data).catch(e => e);
   }
 }

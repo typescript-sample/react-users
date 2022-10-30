@@ -4,6 +4,7 @@ import { emailOnBlur, Gender, handleError, handleSelect, inputEdit, phoneOnBlur,
 import { getRoomService, Room } from './service';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import { useNavigate } from "react-router-dom";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -62,7 +63,7 @@ const listTypeof = [
 ];
 export const BRoomForm = () => {
     const refForm = React.useRef();
-    const [categories, setCategories] = React.useState<string[]>([]);
+    const navigate = useNavigate();
     const { resource, state, setState, updateState, flag, save, back } = useEdit<Room, string, InternalState>(refForm, initialState, getRoomService(), inputEdit(), param);
     const room = state.room;
     console.log(room)
@@ -81,12 +82,15 @@ export const BRoomForm = () => {
     // const handleChange = (newValue: Date | null) => {
     //     setValue(newValue);
     // };
+    const isUpload = React.useMemo(() => window.location.pathname.includes('upload'), [window.location.pathname])
+ 
     return (
         <div className='view-container'>
             <form id='roomForm' name='roomForm' model-name='room' ref={refForm as any}>
                 <header>
                     <button type='button' id='btnBack' name='btnBack' className='btn-back' onClick={back} />
                     <h2>{flag.newMode ? resource.create : resource.edit} {'job'}</h2>
+                    {(!isUpload && !flag.newMode) && <button className='btn-group btn-left'><i onClick={() => navigate('upload')} className='material-icons'>photo</i></button>}
                 </header>
                 <div className="row">
                     <label className='col s12 m6'>

@@ -1,4 +1,6 @@
 import { Attributes, Filter, Service, Tracking,NumberRange } from 'onecore';
+import { FileInfo } from 'reactx-upload';
+import { UploadSerivce } from '../../../backoffice/upload-form';
 export interface Room extends Tracking {
     id: string;
     title: string;
@@ -18,8 +20,10 @@ export interface Room extends Tracking {
     typeof?:string[];
     property?:string;
     language?:string[];
-    imageUrl?:UploadImage[];
-  }
+    gallery?:FileInfo[];
+    imageURL?:string;
+    coverURL?:string;
+  } 
   export interface RoomFilter extends Filter {
     id?: string;
     title?: string;
@@ -40,12 +44,8 @@ export interface Room extends Tracking {
     property?:string;
     language?:string[];
 }
-export interface UploadImage {
-    source?: string;
-    type?: string;
-    url: string;
-  }
-export interface RoomService extends Service<Room, string, RoomFilter> {
+export interface RoomService extends Service<Room, string, RoomFilter>,UploadSerivce<Room> {
+
 }
 export const fileUploadImageModel: Attributes = {
     type: {},

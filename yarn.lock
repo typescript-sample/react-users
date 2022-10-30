@@ -8372,10 +8372,10 @@
   "resolved" "https://registry.npmjs.org/reactx-rate/-/reactx-rate-0.1.0.tgz"
   "version" "0.1.0"
 
-"reactx-upload@0.0.8":
-  "integrity" "sha512-6Y8xaBm1bDrrxl5QwVH6iIVkqKONdDtGYB7AIRYbWUk1dJsHRg9P18PAkAQaFs/foP2FBe/SfqxcgYPRmxO06w=="
-  "resolved" "https://registry.npmjs.org/reactx-upload/-/reactx-upload-0.0.8.tgz"
-  "version" "0.0.8"
+"reactx-upload@0.0.9":
+  "integrity" "sha512-UbymCjvIhC0Sb9sI30gTxg+K1zOixZPxyWX1XA6rfG8vITE3vLeaLO/KfZrHsP3U0MseCVeJ2Lr3a1UN4iORcw=="
+  "resolved" "https://registry.npmjs.org/reactx-upload/-/reactx-upload-0.0.9.tgz"
+  "version" "0.0.9"
 
 "readable-stream@^2.0.1":
   "integrity" "sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw=="

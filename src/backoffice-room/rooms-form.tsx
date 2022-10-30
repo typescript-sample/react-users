@@ -452,8 +452,8 @@ export const BRoomsForm = () => {
                                             <div className="card-user">
                                                 <div className='user-carousel-container'>
                                                     <Carousel infiniteLoop={true}>
-                                                        {room.imageUrl
-                                                            ? room.imageUrl.map((itemData, index) => {
+                                                        {room.gallery
+                                                            ? room.gallery.map((itemData, index) => {
 
                                                                 return (
                                                                     // <img className='image-carousel' src={itemData.url} key={index} alt={itemData.url} draggable={false}/>

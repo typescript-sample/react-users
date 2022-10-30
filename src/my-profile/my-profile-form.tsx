@@ -163,7 +163,7 @@ export const MyProfileForm = () => {
     );
     setLookingForSuggestionService(lookingForSuggestion);
 
-    const userId = storage.getUserId();
+    const userId = "w7GE8z1oF";
     if (userId && userId.length > 0) {
       service.getMyProfile(userId).then((profile) => {
         if (profile) {
@@ -685,7 +685,8 @@ export const MyProfileForm = () => {
   const [follower, setFollower] = useState(0);
   const [following, setFollowing] = useState(0);
   const followService = useFollowUserResponse()
-  const userId: string | undefined = storage.getUserId() || ''
+  // const userId: string | undefined = storage.getUserId() || ''
+  const userId = "w7GE8z1oF"
   useEffect(() => {
     loadFollow()
   }, [])
@@ -705,8 +706,7 @@ export const MyProfileForm = () => {
         <header className='border-bottom-highlight'>
           <div className='cover-image'>
             <img
-              src={'https://www.dropbox.com/s/ozh4wcxrhgvs78l/F_7rpLTap_patrones-con-ilustraciones-neon_2560x1440_3475.png?dl=0'
-              }
+              src={uploadedCover ? uploadedCover :  'https://pre00.deviantart.net/6ecb/th/pre/f/2013/086/3/d/facebook_cover_1_by_alphacid-d5zfrww.jpg'}
               alt='cover'
               style={{ objectFit: 'cover' }}
             />
@@ -2020,7 +2020,7 @@ export const MyProfileForm = () => {
               post={httpRequest.post}
               setURL={(dt: string) => handleChangeFile(dt)}
               type={typeUpload}
-              id={"JSg3tgoY0"}
+              id={"w7GE8z1oF"}
               url={config.myprofile_url}
               aspect={aspect}
               sizes={[576, 768]}
@@ -2028,7 +2028,7 @@ export const MyProfileForm = () => {
               post={httpRequest.post}
               setURL={(dt: string) => handleChangeFile(dt)}
               type={typeUpload}
-              id={user.id}
+              id={"w7GE8z1oF"}
               url={config.myprofile_url}
               aspect={aspect}
               sizes={sizes}
