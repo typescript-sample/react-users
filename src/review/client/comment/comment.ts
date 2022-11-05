@@ -12,6 +12,9 @@ export interface Comment {
   userURL?: string
   comment?: string;
   time?: Date;
+  parent?:string;
+  replyCount?: number;
+  authorName?:string;
 }
 
 export class CommentFilter implements Filter {
@@ -29,7 +32,7 @@ export class CommentFilter implements Filter {
 }
 
 export interface CommentService {
-  search(id: string, author: string,  ctx?: any): Promise<SearchResult<Comment>>;
+  search(id: string, author: string, ctx?: any): Promise<SearchResult<Comment>>;
   getComments(id: string, author: string, ctx?: any): Promise<Comment[]>;
   getComment(id: string, author: string, commentId: string, ctx?: any): Promise<Comment>;
   comment(id: string, author: string, userId: string, comment: Comment, ctx?: any): Promise<boolean>;

@@ -3,7 +3,7 @@ import { HttpRequest } from 'axios-core';
 import { options, storage } from 'uione';
 import { MasterDataClient, MasterDataService } from '../master-data';
 import { ArticleClient, ArticleService } from './article';
-import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService } from "../../review";
+import { CommentClient, CommentService, CommentThreadClient, CommentThreadService,CommentThreadReplyClient, CommentThreadReplyService, RateClient, RateService, ReactionClient, ReactionService, CommentReactionService, CommentReactionClient } from "../../review";
 export * from './article';
 
 // axios.defaults.withCredentials = true;
@@ -13,6 +13,9 @@ export interface Config {
   article_url: string;
   item_url: string;
   article_rate_url: string;
+  article_comment_thread_url: string;
+  article_comment_thread_reaction_url:string;
+  article_comment_reaction_url:string;
 }
 class ApplicationContext {
   articleService?: ArticleService;
@@ -20,8 +23,12 @@ class ApplicationContext {
   rateService?: RateService;
   reactionService?: ReactionService;
   commentService?: CommentService;
+  commentThreadService?: CommentThreadService;
+  commentThreadReplyService?:CommentThreadReplyService;
+  commentThreadReactionService?:CommentReactionService;
+  commentReactionService?:CommentReactionService;
   constructor() {
-    this.getConfig = this.getConfig.bind(this); 
+    this.getConfig = this.getConfig.bind(this);
   }
   getConfig(): Config {
     return storage.config();
@@ -65,6 +72,36 @@ class ApplicationContext {
     }
     return this.commentService;
   }
+  getArticleCommentThreadService(): CommentThreadService {
+    if (!this.commentThreadService) {
+      const c = this.getConfig();
+      this.commentThreadService = new CommentThreadClient(httpRequest, c.article_comment_thread_url);
+    }
+    return this.commentThreadService;
+  }
+  getArticleCommentThreadReplyService():CommentThreadReplyService{
+    if(!this.commentThreadReplyService){
+      const c = this.getConfig();
+      this.commentThreadReplyService = new CommentThreadReplyClient(httpRequest, c.article_comment_thread_url)
+    }
+  return this.commentThreadReplyService
+  }
+  
+  getArticleCommentThreadReactionService():CommentReactionService{
+    if(!this.commentThreadReactionService){
+      const c = this.getConfig();
+      this.commentThreadReactionService = new CommentReactionClient(httpRequest,c.article_comment_thread_reaction_url)
+    }
+    return this.commentThreadReactionService;
+  }
+
+  getArticleCommentReactionService():CommentReactionService{
+    if(!this.commentReactionService){
+      const c = this.getConfig();
+      this.commentReactionService = new CommentReactionClient(httpRequest,c.article_comment_reaction_url)
+    }
+    return this.commentReactionService;
+  }
 }
 
 export const context = new ApplicationContext();
@@ -87,4 +124,14 @@ export function useArticleReaction(): ReactionService {
 
 export function useArticleComment(): CommentService {
   return context.getArticleCommentService();
+}
+export function useArticleCommentThread(): CommentThreadService {
+  return context.getArticleCommentThreadService();
+}
+export function useArticleCommentThreadReply():CommentThreadReplyService{
+  return context.getArticleCommentThreadReplyService();
+}
+
+export function useArticleCommentThreadReaction():CommentReactionService{
+  return context.getArticleCommentReactionService();
 }

@@ -5,13 +5,11 @@ import { Carousel, CarouselImageItem, CarouselVideoItem } from 'reactx-carousel'
 import { getFileExtension, removeFileExtension } from 'reactx-upload';
 import { useResource } from 'uione';
 import imageOnline from '../assets/images/online.svg';
-import { Appreciations } from './appreciations';
-import { getMyProfileService, getUserService, User } from './service/user';
+import { getUserService, User } from './service/user';
 import { useFollowUserResponse, useUserComment, useUserRate, useUserReaction, useUserReact } from './service'
 import { storage } from 'uione';
 import { Review } from "../review";
 import { ApprecitaionPage } from './apppreciationPage';
-import { log } from 'console';
 export function UserPage() {
   const userId: string | undefined = storage.getUserId() || ''
   const { id = "" } = useParams()

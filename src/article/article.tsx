@@ -2,33 +2,39 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RatingStar } from "reactx-rate";
 import { inputSearch, storage } from 'uione';
-import { Rate, RateFilter } from "../review/client";
+import { Comment, Rate, RateFilter } from "../review/client";
 import { DataPostRate, PostRateForm } from "../review/postRate";
 import { PageSizeSelect, SearchComponentState, useSearch } from 'react-hook-core';
 import { Review } from './reviews';
-import { Article, useArticle, useArticleComment, useArticleRate, useArticleReaction } from './service';
+import { Article, useArticle, useArticleComment, useArticleCommentThread, useArticleCommentThreadReply, useArticleRate, useArticleReaction } from './service';
 import { Sort } from './sort';
 import { TextEditorComponent } from './text-editor';
 import './article.css';
+import { CommentThread, CommentThreadFilter } from '../review/client/commentthread';
+import { CommentThreadComponent } from '../review/comment-threads';
+import { DataPostComment, PostCommentThreadForm } from '../review/post-comment-thread-form';
 
 interface RateSearch extends SearchComponentState<Rate, RateFilter> { }
-
+interface CommentThreadSearch extends SearchComponentState<CommentThread, CommentThreadFilter> { }
 export const ArticleForm = () => {
   const refForm = useRef();
   const refEdit = useRef<any>();
   const [article, setArticle] = useState<Article>();
   const [rateRange, setRateRange] = useState<number>(5);
   const [isOpenRateModal, setIsOpenRateModal] = useState(false);
+  const [isOpenCommentThreadModal, setIsOpenCommentThreadModal] = useState(false)
   const [voteStar, setVoteStar] = useState<number>();
   const userId: string | undefined = storage.getUserId() || "";
   const { id = "" } = useParams();
   const navigate = useNavigate();
   const [rates, setRates] = useState<Rate[]>([]);
+  const [commentThreads, setCommentThreads] = useState<CommentThread[]>([])
   const articleService = useArticle();
   const rateService = useArticleRate();
   const reactionService = useArticleReaction();
   const commentService = useArticleComment();
-  
+  const commentThreadService = useArticleCommentThread();
+  const commentThreadReplyService = useArticleCommentThreadReply();
   useEffect(() => { getArticle(id ?? '') }, [id]);
 
   const getArticle = async (id: string) => {
@@ -48,6 +54,15 @@ export const ArticleForm = () => {
     filter: rateFilter,
   }
 
+  const commentThreadFilter: CommentThreadFilter = {
+    id: id,
+  }
+
+  const initialCommentThreadState: CommentThreadSearch = {
+    list: [],
+    filter: commentThreadFilter
+  }
+
   const {
     state,
     setComponent,
@@ -57,13 +72,11 @@ export const ArticleForm = () => {
   } = useSearch<Rate, RateFilter, RateSearch>(refForm, initialState, rateService, inputSearch());
 
   const list = state.list || [];
-  
-  useEffect(() => { 
-    setRates(list) }, [list]);
 
-  if (!article) {
-    return <></>;
-  }
+  useEffect(() => {
+    
+    setRates(list)
+  }, [list]);
 
   state.filter = {
     ...state.filter,
@@ -120,6 +133,7 @@ export const ArticleForm = () => {
     }
   };
 
+  
   const backPage = (e: any) => {
     e.preventDefault();
     const page = Number(component.pageIndex);
@@ -141,6 +155,37 @@ export const ArticleForm = () => {
       });
     }
   };
+
+  const commentThreadSearch = useSearch<CommentThread, CommentThreadFilter, CommentThreadSearch>(refForm, initialCommentThreadState, commentThreadService, inputSearch());
+  const commentThreadList = commentThreadSearch.state.list || []
+
+  useEffect(() => {
+    setCommentThreads(commentThreadList)
+  }, [commentThreadList])
+  
+  const postCommentThread = async (data: DataPostComment): Promise<void> => {
+    try {
+      if (!userId || !article) {
+        return storage.alert("Please sign in to comment");
+      }
+      const comment: CommentThread = {
+        time: new Date(),
+        comment: data.comment,
+        commentId: ''
+      };
+       await commentThreadService.comment(id, userId, comment);
+       const res = await commentThreadService.search({id:id,sort:"time desc"})
+      setCommentThreads(res.list)
+      storage.message("Your comment is submited");
+      setIsOpenCommentThreadModal(false);
+    } catch (err) {
+      storage.alert("error");
+    }
+  }
+
+  if (!article) {
+    return <></>;
+  }
 
   return (
     <div className='view-container'>
@@ -183,6 +228,12 @@ export const ArticleForm = () => {
         postRate={postRate}
         isOpenRateModal={isOpenRateModal}
       />
+      <PostCommentThreadForm
+        name={article.name || article.title || ""}
+        close={() => setIsOpenCommentThreadModal(false)}
+        postComment={postCommentThread}
+        isOpenCommentModal={isOpenCommentThreadModal}
+      />
       <div className="filters">
         <div className="title">
           <span>
@@ -219,6 +270,48 @@ export const ArticleForm = () => {
           </button>
         </>
       )}
-    </div>
+      {/* ************************** */}
+      <div className="filters">
+        <div className="title">
+          <span>
+            <b>Comments</b>
+          </span>
+        </div>
+
+        {/* <div className="filter">
+          <PageSizeSelect
+            size={component.pageSize}
+            sizes={component.pageSizes}
+            onChange={(e) => pageSizeChanged(e)}
+            id="page-select-rate"
+          />
+          <Sort load={load} />
+        </div> */}
+
+        <button style={{
+          color: "#777777",
+          backgroundColor: "#fff",
+          border: " 1px solid #999999",
+          borderRadius: "25px",
+          overflow: "hidden",
+          marginBottom: "10px",
+          padding: "0 !important",
+          width: "max-content !important",
+          display: "flex",
+          height: "max-content"
+        }}
+          onClick={() => { setIsOpenCommentThreadModal(true) }}
+        >Comment</button>
+      </div>
+
+      <CommentThreadComponent
+        id={id}
+        resource={commentThreadSearch.resource}
+        list={commentThreads}
+        commentThreadService={commentThreadService}
+        commentThreadReplyService={commentThreadReplyService}
+        userId={userId}
+      />
+    </div >
   );
 };

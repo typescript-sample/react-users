@@ -14,7 +14,9 @@ export const config = {
 
   article_url: 'http://localhost:8082/articles',
   article_rate_url: 'http://localhost:8082/articles/rates', 
-
+  article_comment_thread_url:'http://localhost:8082/articles/commentthread',
+  article_comment_thread_reaction_url:"http://localhost:8082/articles/commentthread/",
+  article_comment_reaction_url:"http://http://localhost:8082/articles/commentthread/reply",
   my_article_url: 'http://localhost:8082/my-articles',
   cinema_url: 'http://localhost:8082/cinemas',
   backoffice_cinema_url: 'http://localhost:8082/backoffice/cinemas',

@@ -1,3 +1,6 @@
 export * from './comment'
 export * from './rate'
 export * from './reaction'
+export * from './commentthreadreply'
+export * from './commentthread'
+export * from './commentreaction'
