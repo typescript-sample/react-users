@@ -1,28 +1,31 @@
-import { Attributes, Filter, Service, Tracking } from 'onecore';
+import { Attributes, Filter, Service, Tracking } from 'onecore'
 
 export interface UserFilter extends Filter {
-  userId: string;
-  username: string;
-  email: string;
-  displayName: string;
-  status: string[] | string;
-}
+  userId: string
+  username: string
+  email: string
+  displayName: string
+  status: string[] | string
+} // End of UserFilter
+
 export interface User extends Tracking {
-  id: string;
-  username: string;
-  email: string;
-  displayName: string;
-  imageURL?: string;
-  status: string;
-  gender?: string;
-  phone?: string;
-  title?: string;
-  position?: string;
-  roles?: string[];
-}
+  id: string
+  username: string
+  email: string
+  displayName: string
+  imageURL?: string
+  status: string
+  gender?: string
+  phone?: string
+  title?: string
+  position?: string
+  roles?: string[]
+} // End of User
+
 export interface UserService extends Service<User, string, UserFilter> {
-  getUsersByRole(id: string): Promise<User[]>;
-}
+  getUsersByRole(id: string): Promise<User[]>
+  getUsersByCompany(id: string): Promise<User[]>
+} // End of UserService
 
 export const userModel: Attributes = {
   id: {
@@ -76,4 +79,4 @@ export const userModel: Attributes = {
   updatedAt: {
     type: 'datetime'
   }
-};
+} // End of userModel

@@ -1,40 +1,45 @@
-import { Item } from 'onecore';
-import * as React from 'react';
-import { PageSizeSelect, SearchComponentState, useSearch, value } from 'react-hook-core';
-import ReactModal from 'react-modal';
-import Pagination from 'reactx-pagination';
-import { inputSearch } from 'uione';
-import { getUserService, User, UserFilter } from './service';
+import { Item } from 'onecore'
+import * as React from 'react'
+import { PageSizeSelect, SearchComponentState, useSearch, value } from 'react-hook-core'
+import ReactModal from 'react-modal'
+import Pagination from 'reactx-pagination'
+import { inputSearch } from 'uione'
+import { getUserService, User, UserFilter } from './service'
 
-ReactModal.setAppElement('#root');
+ReactModal.setAppElement('#root')
+
 interface Props {
-  isOpenModel: boolean;
-  users: User[];
-  onModelClose?: (e: React.MouseEvent | React.KeyboardEvent) => void;
-  onModelSave: (e: User[]) => void;
-}
+  isOpenModel: boolean
+  users: User[]
+
+  onModelClose?: (e: React.MouseEvent | React.KeyboardEvent) => void
+  onModelSave: (e: User[]) => void
+} // End of Props
 
 interface UserSearch extends SearchComponentState<User, UserFilter> {
-  statusList: Item[];
-  users: any[];
-  availableUsers: any[];
-  filter: UserFilter;
-  list: any[];
+  statusList: Item[]
+  users: any[]
+  availableUsers: any[]
+  filter: UserFilter
+  list: any[]
+
   model: {
-    q: string;
-    userId: string;
-    username: string;
-    email: string;
-    status: any[];
-  };
-}
+    q: string
+    userId: string
+    username: string
+    email: string
+    status: any[]
+  }
+} // End of UserSearch
+
 const userFilter: UserFilter = {
   userId: '',
   username: '',
   displayName: '',
   email: '',
-  status: [],
-};
+  status: []
+} // End of userFilter
+
 const initialState: UserSearch = {
   statusList: [],
   list: [],
@@ -47,162 +52,98 @@ const initialState: UserSearch = {
     email: '',
     status: [],
   },
-  availableUsers: [],
-};
+  availableUsers: []
+} // End of initialState
+
 // props onModelSave onModelClose isOpenModel users?=[]
 export const UsersLookup = (props: Props) => {
-  const refForm = React.useRef();
-  const {
-    state,
-    setState,
-    resource,
-    component,
-    search,
-    sort,
-    pageChanged,
-    pageSizeChanged,
-    changeView,
-  } = useSearch<User, UserFilter, UserSearch>(
-    refForm,
-    initialState,
-    getUserService(),
-    inputSearch()
-  );
-  component.viewable = true;
-  component.editable = true;
-  const isOpenModel = props.isOpenModel;
-  const users = props.users ? props.users : [];
-  const { list } = state;
-  const filter = value(state.model);
-  let index = 0;
+  const refForm = React.useRef()
+  const { state, resource, component, setState, search, sort, pageChanged, pageSizeChanged, changeView } = useSearch<User, UserFilter, UserSearch>(refForm, initialState, getUserService(), inputSearch())
+  component.viewable = true
+  component.editable = true
+  const isOpenModel = props.isOpenModel
+  const users = props.users ? props.users : []
+  const { list } = state
+  const filter = value(state.model)
+  let index = 0
 
   const onCheckUser = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-    const listState = state.list;
-    const usersState = state.users;
-    const target: HTMLInputElement = e.target as HTMLInputElement;
-    const result = listState
-      ? listState.find((v: any) => v.userId === target.value)
-      : undefined;
-    if (result) {
-      const indexCheck = usersState.indexOf(result);
-      if (indexCheck !== -1) {
-        delete usersState[indexCheck];
-      } else {
-        usersState.push(result);
-      }
-      setState({ users: usersState });
+    const listState = state.list
+    const usersState = state.users
+    const target: HTMLInputElement = e.target as HTMLInputElement
+    const result = listState ? listState.find((v: any) => v.id === target.value) : undefined
+
+    if (!result) {
+      return
     }
-  };
+
+    const indexCheck = usersState.indexOf(result)
+
+    if (indexCheck !== -1) {
+      delete usersState[indexCheck]
+    }
+    else {
+      usersState.push(result)
+    }
+
+    setState({ users: usersState })
+  } // End of onCheckUser
 
   const onModelSave = () => {
-    setState({
-      users: [],
-      availableUsers: [],
-      model: { ...state.model, q: '' },
-    });
-    props.onModelSave(state.users);
-  };
+    setState({users: [], availableUsers: [], model: { ...state.model, q: '' }})
+    props.onModelSave(state.users)
+  } // End of onModelSave
 
   const onModelClose = (e: React.MouseEvent | React.KeyboardEvent) => {
-    setState({
-      users: [],
-      availableUsers: [],
-      model: { ...state.model, q: '' },
-    });
+    setState({users: [], availableUsers: [], model: { ...state.model, q: '' }})
+
     if (props.onModelClose) {
-      props.onModelClose(e);
+      props.onModelClose(e)
     }
-  };
+  } // End of onModelClose
 
   const clearUserId = () => {
-    const m = state.model;
-    if (m) {
-      m.q = '';
-      setState({ model: m });
+    if (!state.model) {
+      return
     }
-  };
+
+    state.model.q = ''
+    setState({ model: state.model })
+  } // End of clearUserId
 
   const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { model } = state;
-    setState({
-      model: { ...model, ...({ [e.target.name]: e.target.value } as any) },
-    });
-  };
+    const { model } = state
+    setState({model: { ...model, ...({ [e.target.name]: e.target.value } as any) }})
+  } // End of onChangeText
 
   const onSearch = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    setState({ list: [] });
-    search(e);
-  };
+    setState({ list: [] })
+    search(e)
+  } // End of onSearch
 
   return (
-    <ReactModal
-      isOpen={isOpenModel}
-      onRequestClose={onModelClose}
-      contentLabel='Modal'
-      // portalClassName='modal-portal'
-      className='modal-portal-content'
-      bodyOpenClassName='modal-portal-open'
-      overlayClassName='modal-portal-backdrop'
-    >
+    <ReactModal isOpen={isOpenModel} onRequestClose={onModelClose} contentLabel='Modal' className='modal-portal-content' bodyOpenClassName='modal-portal-open' overlayClassName='modal-portal-backdrop'>
       <div className='view-container'>
         <header>
-          <h2>{resource.users_lookup}</h2>
+          <h2>
+            {resource.users_lookup}
+          </h2>
           <div className='btn-group'>
-          {component.view !== 'table' && <button type='button' id='btnTable' name='btnTable' className='btn-table' data-view='table' onClick={changeView} />}
-          {component.view === 'table' && <button type='button' id='btnListView' name='btnListView' className='btn-list-view' data-view='listview' onClick={changeView} />}
+            {component.view !== 'table' && <button type='button' id='btnTable' name='btnTable' className='btn-table' data-view='table' onClick={changeView} />}
+            {component.view === 'table' && <button type='button' id='btnListView' name='btnListView' className='btn-list-view' data-view='listview' onClick={changeView} />}
           </div>
-          <button
-            type='button'
-            id='btnClose'
-            name='btnClose'
-            className='btn-close'
-            onClick={onModelClose}
-          />
+          <button type='button' id='btnClose' name='btnClose' className='btn-close' onClick={onModelClose} />
         </header>
         <div>
-          <form
-            id='usersLookupForm'
-            name='usersLookupForm'
-            className='usersLookupForm'
-            noValidate={true}
-            ref={refForm as any}
-          >
+          <form id='usersLookupForm' name='usersLookupForm' className='usersLookupForm' noValidate={true} ref={refForm as any}>
             <section className='row search-group'>
               <label className='col s12 m6 search-input'>
-                <PageSizeSelect
-                  size={component.pageSize}
-                  sizes={component.pageSizes}
-                  onChange={pageSizeChanged}
-                />
-                <input
-                  type='text'
-                  id='q'
-                  name='q'
-                  onChange={onChangeText}
-                  value={filter.q}
-                  maxLength={40}
-                  placeholder={resource.user_lookup}
-                />
-                <button
-                  type='button'
-                  hidden={!filter.userId}
-                  className='btn-remove-text'
-                  onClick={clearUserId}
-                />
-                <button
-                  type='submit'
-                  className='btn-search'
-                  onClick={onSearch}
-                />
+                <PageSizeSelect size={component.pageSize} sizes={component.pageSizes} onChange={pageSizeChanged} />
+                <input type='text' id='q' name='q' onChange={onChangeText} value={filter.q} maxLength={40} placeholder={resource.user_lookup} />
+                <button type='button' hidden={!filter.userId} className='btn-remove-text' onClick={clearUserId} />
+                <button type='submit' className='btn-search' onClick={onSearch} />
               </label>
-              <Pagination
-                className='col s6 m3'
-                total={component.total}
-                size={component.pageSize}
-                max={component.pageMaxSize}
-                page={component.pageIndex}
-                onChange={pageChanged}
-              />
+              <Pagination className='col s6 m3' total={component.total} size={component.pageSize} max={component.pageMaxSize} page={component.pageIndex} onChange={pageChanged} />
             </section>
           </form>
           <form className='list-result'>
@@ -296,7 +237,7 @@ export const UsersLookup = (props: Props) => {
                             <input
                               type='checkbox'
                               name='selected'
-                              value={user.userId}
+                              value={user.id}
                               onClick={onCheckUser}
                             />
                             <img

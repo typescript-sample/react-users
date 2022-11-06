@@ -1,56 +1,51 @@
-import { Item } from 'onecore';
-import * as React from 'react';
-import { createModel, DispatchWithCallback, EditComponentParam, useEdit } from 'react-hook-core';
-import { formatPhone } from 'ui-plus';
-import { emailOnBlur, Gender, handleError, handleSelect, inputEdit, options, phoneOnBlur, requiredOnBlur, Status } from 'uione';
-import { getCompanyService, Company, getCompanyCategoriesService } from './service';
-import { TextField, Autocomplete } from "@mui/material";
-import Axios from "axios";
-import { HttpRequest } from "axios-core";
-import { useNavigate } from 'react-router-dom';
+import * as React from 'react'
+import { createModel, DispatchWithCallback, EditComponentParam, useEdit } from 'react-hook-core'
+import { inputEdit, requiredOnBlur } from 'uione'
+import { getCompanyService, Company, getCompanyCategoriesService } from './service'
+import { TextField, Autocomplete } from "@mui/material"
+import { useNavigate } from 'react-router-dom'
 
-const httpRequest = new HttpRequest(Axios, options);
 interface InternalState {
-  company: Company;
-  categoryList: string[];
-  showAutocomplete: boolean;
-}
+  company: Company
+  categoryList: string[]
+  showAutocomplete: boolean
+} // End of InternalState
 
 const initialState: InternalState = {
   company: {} as Company,
   categoryList: [],
-  showAutocomplete: false,
-};
-const createCompany = (): Company => {
-  const company = createModel<Company>();
-  return company;
-};
-const initialize = (
-  id: string | null,
-  load: (id: string | null) => void,
-  set: DispatchWithCallback<Partial<InternalState>>
-) => {
-  const categoryService = getCompanyCategoriesService();
-  categoryService.getAllCompanyCategories().then((allCompanyCategories) => {
-    const categoryList: string[] = [];
-    for (const item of allCompanyCategories.list) {
-      categoryList.push(item.categoryName);
-    }
-    load(id);
-    set({ categoryList, showAutocomplete: true });
-  });
-};
+  showAutocomplete: false
+} // End of initialState
+
+const createCompany = (): Company => createModel<Company>()
+
+const initialize = (id: string | null, load: (id: string | null) => void, set: DispatchWithCallback<Partial<InternalState>>) => getCompanyCategoriesService().getAllCompanyCategories().then((allCompanyCategories) => {
+  const categoryList: string[] = []
+
+  for (const item of allCompanyCategories.list) {
+    categoryList.push(item.categoryName)
+  }
+
+  load(id)
+  set({ categoryList, showAutocomplete: true })
+}) // End of initialize
+
 const param: EditComponentParam<Company, string, InternalState> = {
   createModel: createCompany,
   initialize
-};
+} // End of param
 
 export const CompanyForm = () => {
-  const refForm = React.useRef();
-  const navigate = useNavigate();
-  const { resource, state, setState, updateState, flag, save, back } = useEdit<Company, string, InternalState>(refForm, initialState, getCompanyService(), inputEdit(), param);
-  const company = state.company;
+  const refForm = React.useRef()
+  const navigate = useNavigate()
+  const { resource, state, setState, updateState, flag, save, back } = useEdit<Company, string, InternalState>(refForm, initialState, getCompanyService(), inputEdit(), param)
+  const company = state.company
   const isUpload = React.useMemo(() => window.location.pathname.includes('upload'), [window.location.pathname])
+
+  const assignUsers = (e: React.MouseEvent<HTMLElement, MouseEvent>, id: string) => {
+    e.preventDefault();
+    navigate(`/backoffice/companies/edit/${id}/assign-users`);
+  } // End of assignUsers
 
   return (
     <div className='view-container'>
@@ -59,6 +54,8 @@ export const CompanyForm = () => {
           <button type='button' id='btnBack' name='btnBack' className='btn-back' onClick={back} />
           <h2>{flag.newMode ? resource.create : resource.edit} {'Company'}</h2>
           {(!isUpload && !flag.newMode) && <button className='btn-group btn-left'><i onClick={() => navigate('upload')} className='material-icons'>photo</i></button>}
+
+          <button className='btn-group btn-right'><i onClick={e => assignUsers(e, company.id)} className='material-icons'>group</i></button>
         </header>
         <div className="row">
           <label className='col s12 m6'>

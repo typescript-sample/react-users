@@ -58,6 +58,7 @@ import { BCinemaForm } from "./backoffice-cinema/cinema-form";
 
 import { CompaniesForm } from "./backoffice-company/companies-form";
 import { CompanyForm } from "./backoffice-company/company-form";
+import { CompanyUsersAssignment } from "./backoffice-company/company-users-assignment";
 import { CompaniesFormClient } from "./company/companies-form";
 import { CompanyFormClient } from "./company/company-page";
 
@@ -273,6 +274,7 @@ function App() {
           <Route path="backoffice/companies/add" element={<CompanyForm />} />
           <Route path="backoffice/companies/edit/:id" element={<CompanyForm />} />
           <Route path="backoffice/companies/edit/:id/upload" element={<CompanyUpload />} />
+          <Route path="backoffice/companies/edit/:id/assign-users" element={<CompanyUsersAssignment />} />
 
           <Route path="companies" element={<CompaniesFormClient />} />
           <Route path="companies/:id" element={<CompanyFormClient />} />

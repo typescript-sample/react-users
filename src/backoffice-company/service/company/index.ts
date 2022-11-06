@@ -1,67 +1,83 @@
-import { HttpRequest } from 'axios-core';
-import { Client } from 'web-clients';
-import { Company, CompanyFilter, companyModel, CompanyService } from './company';
-import { FileInfo } from "reactx-upload";
+import { HttpRequest } from 'axios-core'
+import { Client } from 'web-clients'
+import { Company, CompanyFilter, companyModel, CompanyService } from './company'
+import { FileInfo } from "reactx-upload"
 
-export * from './company';
+export * from './company'
+
 export class CompanyClient extends Client<Company, string, CompanyFilter> implements CompanyService {
   constructor(protected http: HttpRequest, private url: string) {
-    super(http, url, companyModel);
-    this.searchGet = false;
-    this.getCompany = this.getCompany.bind(this);
-    this.fetchImageUploadedGallery =this.fetchImageUploadedGallery.bind(this);
+    super(http, url, companyModel)
+    this.searchGet = false
+    this.getCompany = this.getCompany.bind(this)
+    this.fetchImageUploadedGallery =this.fetchImageUploadedGallery.bind(this)
   }
-  getCompany(id: string): Promise<Company[]> {
-    const url = `${this.serviceUrl}?roleId=${id}`;
-    return this.http.get<Company[]>(url);
-  }
-  // getCompany(id: string): Promise<Company[]> {
-  //   const url = this.url + "/" + id;
-  //   return this.http.get<Company>(url).catch((err) => {
-  //     const data = err && err.response ? err.response : err;
-  //     if (data && (data.status === 404 || data.status === 410)) {
-  //       return null;
-  //     }
-  //     throw err;
-  //   });
-  // }
-  postOnly(s: CompanyFilter): boolean {
-    return true;
-  }
-  fetchImageUploadedGallery(id: string): Promise<FileInfo[] | []> {
-    return this.http.get<FileInfo[]>(this.url + `/${id}/fetchImageGalleryUploaded`).catch(err => {
-      const data = (err && err.response) ? err.response : err;
+
+  getCompany = (id: string): Promise<Company[]> => this.http.get<Company[]>(`${this.serviceUrl}?roleId=${id}`)
+  assignUsers = (id: string, users: string[]): Promise<number> => this.http.patch(`${this.serviceUrl}/${id}/assign-users`, users)
+  deassignUsers = (id: string, users: string[]): Promise<number> => this.http.patch(`${this.serviceUrl}/${id}/deassign-users`, users)
+  postOnly = (s: CompanyFilter): boolean => true
+
+  async fetchImageUploadedGallery(id: string): Promise<FileInfo[] | []> {
+    try {
+      return await this.http.get<FileInfo[]>(`${this.url}/${id}/fetchImageGalleryUploaded`)
+    }
+    catch (e) {
+      const err = e as any
+      const data = (err && err.response) ? err.response : err
+      
       if (data && (data.status === 404 || data.status === 410)) {
-        return [];
+        return []
       }
-      throw err;
-    });
-  }
 
-  deleteFile = (id: string, fileUrl: string): Promise<number> => {
-    if (id) {
-      return this.http.delete(this.url + `/${id}/gallery?&url=${fileUrl}`).then(() => {
-        return 1;
-      }).catch(() => 0);
+      throw e
     }
-    return new Promise(resolve => resolve(0));
-  }
+  } // End of fetchImageUploadedGallery
 
-  deleteFileYoutube = (id: string, fileUrl: string): Promise<number> => {
-    if (id) {
-      return this.http.delete(this.url + `/${id}/external-resource?url=${fileUrl}`).then(() => {
-        return 1;
-      }).catch(() => 0);
+  async deleteFile(id: string, fileUrl: string): Promise<number> {
+    if (!id) {
+      return 0
     }
-    return new Promise(resolve => resolve(0));
-  }
 
-  uploadExternalResource = (id: string, videoId: string): Promise<number> => {
-    return this.http.post(this.url + `/${id}/external-resource?type=${'youtube'}&url=${'https://www.youtube.com/embed/' + videoId}`, {}).then(() => 1).catch(() => 0);
-  }
+    try {
+      await this.http.delete(`${this.url}/${id}/gallery?&url=${fileUrl}`)
+      return 1
+    }
+    catch {
+      return 0
+    }
+  } // End of deleteFile
 
-  updateData = (id: string, data: FileInfo[]): Promise<number> => {
- 
-    return this.http.patch<number>(this.url + `/${id}/gallery`, data).catch(e => e);
+  async deleteFileYoutube(id: string, fileUrl: string): Promise<number> {
+    if (!id) {
+      return 0
+    }
+
+    try {
+      await this.http.delete(`${this.url}/${id}/external-resource?url=${fileUrl}`)
+      return 1
+    }
+    catch {
+      return 0
+    }
+  } // deleteFileYoutube
+
+  async uploadExternalResource(id: string, videoId: string): Promise<number> {
+    try {
+      await this.http.post(`${this.url}/${id}/external-resource?type=${'youtube'}&url=${'https://www.youtube.com/embed/' + videoId}`, {})
+      return 1
+    }
+    catch {
+      return 0
+    }
+  } // End of uploadExternalResource
+
+  async updateData(id: string, data: FileInfo[]): Promise<number> {
+    try {
+      return await this.http.patch<number>(`${this.url}/${id}/gallery`, data)
+    }
+    catch (e) {
+      throw e
+    }
   }
-}
+} // End of CompanyClient
