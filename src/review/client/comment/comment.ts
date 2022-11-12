@@ -14,6 +14,7 @@ export interface Comment {
   time?: Date;
   parent?:string;
   replyCount?: number;
+  usefulCount?:number;
   authorName?:string;
 }
 
@@ -59,5 +60,6 @@ export const commentModel: Attributes = {
   comment: {},
   time: {
     type: 'datetime'
-  }
+  },
+
 };

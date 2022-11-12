@@ -6,7 +6,7 @@ import { getFileExtension, removeFileExtension } from 'reactx-upload';
 import { useResource } from 'uione';
 import imageOnline from '../assets/images/online.svg';
 import { getUserService, User } from './service/user';
-import { useFollowUserResponse, useUserComment, useUserRate, useUserReaction, useUserReact } from './service'
+import { useFollowUserResponse, useUserComment, useUserRate, useUserReaction, useUserReact, useUserSearchRate } from './service'
 import { storage } from 'uione';
 import { Review } from "../review";
 import { ApprecitaionPage } from './apppreciationPage';
@@ -26,6 +26,7 @@ export function UserPage() {
   const refId = useRef<string>();
   const refForm = useRef();
   const rateService = useUserRate();
+  const searchRateService = useUserSearchRate();
   const reactionService = useUserReaction();
   const reactService = useUserReact();
   const commentService = useUserComment();
@@ -203,7 +204,7 @@ export function UserPage() {
         </header>
         <div className='row'>
 
-          <Review i={user} get={getUser} id={id} userId={userId} rateRange={10} rateService={rateService} reactionService={reactionService} commentService={commentService} />
+          <Review i={user} get={getUser} id={id} userId={userId} rateRange={10} rateService={rateService} searchRateService={searchRateService} reactionService={reactionService} commentService={commentService} />
         </div>
         {/* <Appreciations /> */}
        {!window.location.pathname.includes('review') &&  window.location.pathname.includes('appreciation')&& <ApprecitaionPage id={id} userId={userId} />}

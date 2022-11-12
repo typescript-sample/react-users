@@ -34,7 +34,6 @@ import { FilmForm as Film } from "./film/film-form";
 import { FilmsForm as Films } from "./film/films-form";
 
 import { LocationForm } from "./backoffice/location-form";
-import { LocationsForm } from "./backoffice/locations-form";
 
 import { BLocationForm } from "./backoffice-location/location-form";
 import { BLocationsForm } from "./backoffice-location/locations-form";

@@ -4,9 +4,9 @@ import { checked, OnClick, PageSizeSelect, SearchComponentState, useSearch, valu
 import { useNavigate } from 'react-router-dom';
 import { Pagination } from 'reactx-pagination';
 import { inputSearch } from 'uione';
-import { useCinema } from './service';
 import { Cinema, CinemaFilter } from './service/cinema/cinema';
 import 'leaflet/dist/leaflet.css';
+import { getCinemaService } from './service';
 
 interface CinemaSearch extends SearchComponentState<Cinema, CinemaFilter> {
   statusList: ValueText[];
@@ -42,7 +42,7 @@ export const BCinemasForm = () => {
     pageSizeChanged } = useSearch<Cinema, CinemaFilter, CinemaSearch>(
       refForm,
       initialState,
-      useCinema(),
+      getCinemaService(),
       inputSearch());
 
   component.viewable = true;

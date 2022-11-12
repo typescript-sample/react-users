@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useFilm, useFilmComment, useFilmRate, useFilmReaction } from "./service";
+import { useFilm, useFilmComment, useFilmRate, useFilmReaction, useFilmSearchRate } from "./service";
 import { Film } from "./service/film";
 import { OverviewFilm } from "./overview";
 import { Review } from "../review";
@@ -10,8 +10,10 @@ export const FilmForm = () => {
   const { id = "" } = useParams();
   const filmService = useFilm();
   const rateService = useFilmRate();
+  const searchRateService = useFilmSearchRate()
   const reactionService = useFilmReaction();
   const commentService = useFilmComment();
+
   const userId: string | undefined = storage.getUserId() || "";
   const [film, setFilm] = useState<Film>();
 
@@ -60,7 +62,7 @@ export const FilmForm = () => {
 
         <div className="row">
           <OverviewFilm film={film} />
-          <Review i={film} get={getFilm} id={id} userId={userId} rateRange={10} rateService={rateService} reactionService={reactionService} commentService={commentService}/>
+          <Review i={film} get={getFilm} id={id} userId={userId} rateRange={10} searchRateService={searchRateService} rateService={rateService} reactionService={reactionService} commentService={commentService}/>
         </div>
       </form>
     </div>

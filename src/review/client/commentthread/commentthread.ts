@@ -13,7 +13,8 @@ export interface CommentThread extends Tracking {
   authorURL?: string;
   replyCount?: number;
   usefulCount?: number;
-  authorName?:string;
+  authorName?: string;
+  disable?:boolean;
 }
 
 export interface ShortComment {
@@ -22,7 +23,7 @@ export interface ShortComment {
 }
 
 export interface CommentThreadService extends SearchService<CommentThread, CommentThreadFilter> {
-  comment(id: string, author: string, comment: CommentThread, ctx?: any): Promise<number>;
+  comment(id: string, author: string, comment: CommentThread, ctx?: any): Promise<string>;
   updateComment(commentid: string, newComment: CommentThread, ctx?: any): Promise<number>;
   removeComment(commentid: string, ctx?: any): Promise<number>;
 }
@@ -33,6 +34,7 @@ export interface CommentThreadFilter extends Filter {
   author?: string;
   comment?: string;
   time?: Date;
+  userId?:string;
 }
 export const commentThreadHistoryModel: Attributes = {
   comment: {
@@ -43,7 +45,7 @@ export const commentThreadHistoryModel: Attributes = {
   },
 }
 export const commentThreadModel: Attributes = {
-  commentid: {
+  commentId: {
     key: true,
     required: true,
     match: 'equal'

@@ -1,24 +1,25 @@
 import * as React from "react";
-import { useEffect, useState, useRef } from "react";
+import { useRef } from "react";
 import {
   createModel,
   DispatchWithCallback,
   EditComponentParam,
   useEdit,
 } from "react-hook-core";
-import { inputEdit, Status, handleError } from "uione";
-import { useCategory, useDirector, useCast, useProduction, useCountry, useFilm } from "./service";
+import { inputEdit, Status, options } from "uione";
+import { useCategory, useDirector, getFilmService } from "./service";
 import { Film } from "./service/film";
 // import { StringService } from 'pg-extension';
 import {
   Chip,
   TextField,
   Autocomplete,
-  ThemeProvider,
-  createTheme,
 } from "@mui/material";
 import { SuggestionService } from 'suggestion-service';
-
+import { useNavigate } from "react-router-dom";
+import Axios from "axios";
+import { HttpRequest } from "axios-core";
+const httpRequest = new HttpRequest(Axios, options);
 interface InternalState {
   film: Film;
   categoryList: string[];
@@ -38,7 +39,7 @@ const createFilm = (): Film => {
 };
 
 const initialize = async (
-  filmId: string | null,
+  id: string | null,
   load: (id: string | null) => void,
   set: DispatchWithCallback<Partial<InternalState>>
 ) => {
@@ -49,7 +50,7 @@ const initialize = async (
     for (const item of allCategories.list) {
       categoryList.push(item.categoryName);
     }
-    load(filmId);
+    load(id);
     set({ categoryList, showAutocomplete: true });
   });
 };
@@ -61,12 +62,16 @@ const param: EditComponentParam<Film, string, InternalState> = {
 
 
 export const FilmForm = () => {
+  const navigate = useNavigate();
   const refForm = useRef();
   const { resource, state, setState, back, flag, updateState, save } = useEdit<
     Film,
     string,
     InternalState
-  >(refForm, initialState, useFilm(), inputEdit(), param);
+  >(refForm, initialState, getFilmService(), inputEdit(), param);
+  const filmService = React.useMemo(() => {
+    return getFilmService()
+  }, [])
 
   // useEffect(() => {
 
@@ -76,41 +81,41 @@ export const FilmForm = () => {
     directorsService.query,
     20
   );
-  console.log(directorsService)
-  console.log(directorsSuggestion)
-
-
-  const film = state.film;
-
+  const film = React.useMemo(() => {
+    console.log('state.film', state);
+    return state.film
+  }, [state]);
 
   const onChangeDirectors = (e: any, newValue: string[]) => {
     if (newValue.length > -1) {
       const newItem = { ...film, directors: newValue };
-      setState({ film: newItem }, () => {});
+      setState({ film: newItem }, () => { });
     }
   };
 
   const onChangeCast = (e: any, newValue: string[]) => {
     if (newValue.length > -1) {
       const newItem = { ...film, casts: newValue };
-      setState({ film: newItem }, () => {});
+      setState({ film: newItem }, () => { });
     }
   };
 
   const onChangeProductions = (e: any, newValue: string[]) => {
     if (newValue.length > -1) {
       const newItem = { ...film, productions: newValue };
-      setState({ film: newItem }, () => {});
+      setState({ film: newItem }, () => { });
     }
   };
 
   const onChangeCountries = (e: any, newValue: string[]) => {
     if (newValue.length > -1) {
       const newItem = { ...film, countries: newValue };
-      setState({ film: newItem }, () => {});
+      setState({ film: newItem }, () => { });
     }
   };
 
+  const isUpload = React.useMemo(() => window.location.pathname.includes('upload'), [window.location.pathname])
+ 
   return (
     <div className="view-container">
       <form
@@ -128,16 +133,17 @@ export const FilmForm = () => {
             onClick={back}
           />
           <h2>{flag.newMode ? resource.create : resource.edit} film</h2>
+          {(!isUpload && !flag.newMode) && <button className='btn-group btn-left'><i onClick={() => navigate('upload')} className='material-icons'>photo</i></button>}
         </header>
         <div>
           <section className="row">
             <label className="col s12 m6">
-              {resource.film_id}
+              {resource.film_id ?? "Film ID"}
               <input
                 type="text"
-                id="filmId"
-                name="filmId"
-                value={film.filmId}
+                id="id"
+                name="id"
+                value={film.id}
                 onChange={updateState}
                 maxLength={20}
                 required={true}
@@ -146,7 +152,7 @@ export const FilmForm = () => {
               />
             </label>
             <label className="col s12 m6">
-              {resource.title}
+              {resource.title ? resource.title : "Title"}
               <input
                 type="text"
                 id="title"
@@ -159,19 +165,19 @@ export const FilmForm = () => {
               />
             </label>
             <label className="col s12 m6">
-              {resource.image_url}
+              {resource.image_url ? resource.image_url : "Image URL"}
               <input
                 type="text"
                 id="imageUrl"
                 name="imageUrl"
-                value={film.imageUrl}
+                value={film.imageURL}
                 onChange={updateState}
                 maxLength={300}
                 placeholder={resource.image_url}
               />
             </label>
             <label className="col s12 m6">
-              {resource.trailer_url}
+              {resource.trailer_url ? resource.trailer_url : "Trailer URL"}
               <input
                 type="text"
                 id="trailerUrl"
@@ -350,7 +356,7 @@ export const FilmForm = () => {
                   value={film.categories}
                   onChange={(e, newValue) => {
                     const newFilm = { ...film, categories: newValue };
-                    setState({ film: newFilm }, () => {});
+                    setState({ film: newFilm }, () => { });
                   }}
                   filterSelectedOptions={true}
                   renderInput={(params) => (

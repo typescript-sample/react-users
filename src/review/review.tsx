@@ -3,7 +3,7 @@ import ReactModal from "react-modal";
 import { inputSearch, storage } from "uione";
 import { PageSizeSelect, SearchComponentState, useSearch } from "react-hook-core";
 
-import { Rate, RateFilter, RateService, ReactionService, CommentService } from "./client";
+import { Rate, RateFilter, RateService, ReactionService, CommentService, SearchRateService } from "./client";
 import { Sort } from "./sort";
 import { DataPostRate, PostRateForm } from "./postRate";
 import { ReviewScore } from "reactx-rate";
@@ -19,15 +19,17 @@ interface RateSearch extends SearchComponentState<Rate, RateFilter> { }
 interface Props {
   i: any;
   get: (id: string) => Promise<void>;
+  user?:any;
   id: string;
   userId: string;
   rateRange: number;
   rateService: RateService;
+  searchRateService:SearchRateService;
   reactionService: ReactionService;
   commentService: CommentService;
 }
 
-export const Review = ({ i, get, id, userId, rateRange, rateService, reactionService, commentService }: Props) => {
+export const Review = ({ i, get, id, userId, user,rateRange, rateService, searchRateService, reactionService, commentService }: Props) => {
   const [isOpenRateModal, setIsOpenRateModal] = useState(false);
   const [voteStar, setVoteStar] = useState<number>();
   const refForm = useRef();
@@ -45,7 +47,7 @@ export const Review = ({ i, get, id, userId, rateRange, rateService, reactionSer
     Rate,
     RateFilter,
     RateSearch
-  >(refForm, initialState, rateService, inputSearch());
+  >(refForm, initialState, searchRateService, inputSearch());
 
   const list = state.list || [];
   
@@ -152,6 +154,7 @@ export const Review = ({ i, get, id, userId, rateRange, rateService, reactionSer
             list.map((i: any) => {
               return (
                 <RateItem
+                user={user}
                   key={i.author}
                   id={id}
                   userId={userId}

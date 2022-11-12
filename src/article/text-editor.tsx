@@ -417,17 +417,17 @@ export const TextEditorComponent: React.FC<{
 
   const findAndActiveSelected = () => {
     const {
-      FormatTexts,
-      FormatFonts,
-      FormatSizes,
-      FormatBackgroundColors,
-      FormatColors
+      format_texts,
+      format_fonts,
+      format_sizes,
+      format_background_colors,
+      format_colors
     } = configEditor.config;
-    const newFormatTexts = FormatTexts.map((item: PropsStyle) => item.value);
-    const newFormatFonts = FormatFonts.map((item: PropsStyle) => item.value);
-    const newFormatSizes = FormatSizes.map((item: PropsStyle) => item.value);
-    const newFormatBackgroundColors = FormatBackgroundColors.map((item: PropsStyle) => item.value);
-    const newFormatColors = FormatColors.map((item: PropsStyle) => item.value);
+    const newFormatTexts = format_texts.map((item: PropsStyle) => item.value);
+    const newFormatFonts = format_fonts.map((item: PropsStyle) => item.value);
+    const newFormatSizes = format_sizes.map((item: PropsStyle) => item.value);
+    const newFormatBackgroundColors = format_background_colors.map((item: PropsStyle) => item.value);
+    const newFormatColors = format_colors.map((item: PropsStyle) => item.value);
     // @ts-ignore
     for (const _node: Node of parentNodesCurrent) {
       // @ts-ignore
@@ -617,12 +617,12 @@ export const TextEditorComponent: React.FC<{
 
 
   const {
-    FormatTexts,
-    FormatFonts,
+    format_texts,
+    format_fonts,
     // Formats,
-    FormatSizes,
-    FormatBackgroundColors,
-    FormatColors
+    format_sizes,
+    format_background_colors,
+    format_colors
   } = configEditor.config;
   // toolBar-text toolBar btn-group toolBar-button
   // @ts-ignore
@@ -638,7 +638,7 @@ export const TextEditorComponent: React.FC<{
                   formatDoc($event, 'formatblock', $event.target.value);
                   hasTagNameFormatText('H1');
                 }} className='custom-select'>
-                  {FormatTexts && FormatTexts.map((item: PropsStyle, index: number) => (
+                  {format_texts && format_texts.map((item: PropsStyle, index: number) => (
                     <option key={index} value={item.value.toString()}>{item.text}</option>)
                   )}
                 </select>
@@ -646,7 +646,7 @@ export const TextEditorComponent: React.FC<{
                   formatDoc($event, 'fontname', $event.target.value);
                   getAttributeValue('face');
                 }} placeholder='select font' className='custom-select'>
-                  {FormatFonts && FormatFonts.map((item: PropsStyle, index: number) => (
+                  {format_fonts && format_colors.map((item: PropsStyle, index: number) => (
                     <option key={index} value={item.value.toString()}>{item.text}</option>)
                   )}
                 </select>
@@ -654,7 +654,7 @@ export const TextEditorComponent: React.FC<{
                   formatDoc($event, 'fontsize', $event.target.value);
                   getAttributeValue('size');
                 }} className='custom-select'>
-                  {FormatSizes && FormatSizes.map((item: PropsStyle, index: number) => (
+                  {format_sizes && format_sizes.map((item: PropsStyle, index: number) => (
                     <option key={index} value={item.value.toString()}>{item.text}</option>)
                   )}
                 </select>
@@ -662,7 +662,7 @@ export const TextEditorComponent: React.FC<{
                   formatDoc($event, 'forecolor', $event.target.value);
                   getAttributeValue('color');
                 }} className='custom-select'>
-                  {FormatColors && FormatColors.map((item: PropsStyle, index: number) => (
+                  {format_colors && format_colors.map((item: PropsStyle, index: number) => (
                     <option key={index} value={item.value.toString()}>{item.text}</option>)
                   )}
                 </select>
@@ -671,7 +671,7 @@ export const TextEditorComponent: React.FC<{
                     formatDoc($event, 'backcolor', $event.target.value);
                     getStyleValue(' background-color');
                   }} className='custom-select'>
-                    {FormatBackgroundColors && FormatBackgroundColors.map((item: PropsStyle, index: number) => (
+                    {format_background_colors && format_background_colors.map((item: PropsStyle, index: number) => (
                       <option key={index} value={item.value.toString()}>{item.text}</option>)
                     )}
                   </select>

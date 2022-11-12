@@ -32,7 +32,7 @@ const initialState: LocationSearch = {
   list: [],
   filter: userFilter,
 };
-export const LocationsForm = () => {
+export const BLocationsForm = () => {
   const refForm = React.useRef();
   const navigate = useNavigate();
   const {

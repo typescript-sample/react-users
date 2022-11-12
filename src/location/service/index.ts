@@ -6,7 +6,7 @@ import { FollowClient, FollowService } from "./follow";
 import { LocationClient } from "./location";
 import { LocationService } from "./location/location";
 import { SavedItemClient, SavedItemService } from "./saved-location";
-import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService } from "../../review";
+import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService, SearchRateClient, SearchRateService } from "../../review";
 
 export * from "./location";
 
@@ -23,6 +23,7 @@ class ApplicationContext {
   savedItemService?: SavedItemService;
   followService?: FollowService;
   rateService?: RateService;
+  searchRateService?:SearchRateService;
   reactionService?: ReactionService;
   commentService?: CommentService;
 
@@ -67,6 +68,14 @@ class ApplicationContext {
     return this.rateService;
   }
 
+  getLocationSearchRateService(): SearchRateService {
+    if (!this.searchRateService) {
+      const c = this.getConfig();
+      this.searchRateService = new SearchRateClient(httpRequest, c.location_rate_url);
+    }
+    return this.searchRateService;
+  }
+
   getLocationReactionService(): ReactionService {
     if (!this.reactionService) {
       const c = this.getConfig();
@@ -105,6 +114,9 @@ export function useFollowLocationResponse(): FollowService {
 
 export function useLocationRate(): RateService {
   return context.getLocationRateService();
+}
+export function useLocationSearchRate(): SearchRateService {
+  return context.getLocationSearchRateService();
 }
 
 export function useLocationReaction(): ReactionService {

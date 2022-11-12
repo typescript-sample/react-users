@@ -1,8 +1,9 @@
 import React from 'react';
 import { createModel, DispatchWithCallback, EditComponentParam, useEdit } from 'react-hook-core';
+import { useNavigate } from 'react-router-dom';
 
 import { inputEdit, Status } from 'uione';
-import { Cinema, useCinema } from './service';
+import { Cinema, getCinemaService } from './service';
 
 interface InternalState {
   cinema: Cinema;
@@ -27,14 +28,18 @@ const param: EditComponentParam<Cinema, string, InternalState> = {
 };
 export const BCinemaForm = () => {
   const refForm = React.useRef();
-  const { resource, updateState, flag, save, back, state } = useEdit<Cinema, string, InternalState>(refForm, initialState, useCinema(), inputEdit(), param);
+  const navigate = useNavigate();
+  const { resource, updateState, flag, save, back, state } = useEdit<Cinema, string, InternalState>(refForm, initialState, getCinemaService(), inputEdit(), param);
   const cinema = state.cinema;
+  const isUpload = React.useMemo(() => window.location.pathname.includes('upload'), [window.location.pathname])
+ 
   return (
     <div className='view-container'>
       <form id='cinemaForm' name='cinemaForm' model-name='cinema' ref={refForm as any}>
         <header>
           <button type='button' id='btnBack' name='btnBack' className='btn-back' onClick={back} />
           <h2>{flag.newMode ? resource.create : resource.edit} cinema</h2>
+          {(!isUpload && !flag.newMode) && <button className='btn-group btn-left'><i onClick={() => navigate('upload')} className='material-icons'>photo</i></button>}
         </header>
         <div className='row'>
           <label className='col s12 m6'>

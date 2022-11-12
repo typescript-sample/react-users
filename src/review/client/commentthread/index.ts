@@ -19,7 +19,7 @@ export class CommentThreadClient extends SearchWebClient<CommentThread, CommentT
     const url = `${this.serviceUrl}/${commentid}`
     return this.http.put(url, newCommentThread, ctx)
   }
-  comment(id: string, author: string, comment:CommentThread,ctx?: any): Promise<number> {
+  comment(id: string, author: string, comment:CommentThread,ctx?: any): Promise<string> {
     const url = `${this.serviceUrl}/${id}/${author}`;
     return this.http.post(url, comment, ctx)
   }

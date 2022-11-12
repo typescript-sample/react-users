@@ -2,7 +2,7 @@ import axios from 'axios';
 import { HttpRequest } from 'axios-core';
 import { useEffect, useState } from 'react';
 import { options, storage } from 'uione';
-import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService } from '../../review';
+import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService, SearchRateClient, SearchRateService } from '../../review';
 import { AppreciationClient, AppreciationService } from './appreciation';
 import { ReplyClient, ReplyService } from './appreciation-reply';
 import { FollowService, FollowClient } from './follow';
@@ -26,9 +26,11 @@ class ApplicationContext {
   appreciationReplyService?: ReplyService;
   followService?: FollowService
   rateService?: RateService;
+  searchRateService?:SearchRateService;
   reactionService?: ReactionService;
   commentService?: CommentService;
   reactService?: ReactService;
+  
 
 
   constructor() {
@@ -81,6 +83,13 @@ class ApplicationContext {
       this.rateService = new RateClient(httpRequest, c.user_rate_url);
     }
     return this.rateService;
+  }
+  getUserSearchRateService():SearchRateService{
+    if(!this.searchRateService){
+      const c = this.getConfig();
+      this.searchRateService = new SearchRateClient(httpRequest, c.user_rate_url);
+    }
+    return this.searchRateService
   }
 
   getUserReactionService(): ReactionService {
@@ -168,7 +177,9 @@ export function useFollowUserResponse(): FollowService {
 export function useUserRate(): RateService {
   return appContext.getUserRateService();
 }
-
+export function useUserSearchRate():SearchRateService{
+  return appContext.getUserSearchRateService();
+}
 export function useUserReaction(): ReactionService {
   return appContext.getUserReactionService();
 }

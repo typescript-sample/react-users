@@ -1,6 +1,6 @@
 import moment from "moment";
-import { useState } from "react";
-import { StringMap, storage } from "uione";
+import { useEffect, useState } from "react";
+import { StringMap, storage, handleError } from "uione";
 import { OnClick } from "react-hook-core";
 import like from "../assets/images/like.svg";
 import likeFilled from "../assets/images/like_filled.svg";
@@ -13,6 +13,7 @@ import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 interface Props {
   id: string;
   userId: string;
+  user: any;
   rateRange: number;
   data: Rate;
   resource: StringMap;
@@ -21,17 +22,22 @@ interface Props {
   commentService: CommentService;
 }
 
-export const RateItem = ({ id, userId, data, resource, disable, rateRange, reactionService, commentService }: Props) => {
+export const RateItem = ({ id, userId, user, data, resource, disable, rateRange, reactionService, commentService }: Props) => {
   const [isReplies, setIsReplies] = useState(false);
   const [isShowComment, setIsShowComment] = useState(false);
   const [input, setInput] = useState("");
-  const [comment, setComment] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [commentCount, setCommentCount] = useState<number>(data.replyCount || 0);
   const [likeCount, setLikeCount] = useState<number>(data.usefulCount || 0);
   const [isDisable, setIsDisable] = useState<boolean>(disable);
+
   const [more, setMore] = useState(false);
   const maxLengthReviewText = 300;
-
+  useEffect(()=>{
+    commentService.search(id, data.author ?? "").then(res=>{
+      setComments(res.list);
+    })
+  },[])
   const renderReviewStar = (value: any) => {
     const starList = Array(rateRange)
       .fill(<i />)
@@ -86,12 +92,6 @@ export const RateItem = ({ id, userId, data, resource, disable, rateRange, react
     setLikeCount(likeCount - 1);
   };
 
-  const loadComments = async (e: OnClick, data: Rate) => {
-    //const cmt = await commentService.getComments(id, String(data.author));
-    const cmt = await commentService.search(id, String(data.author));
-    setComment(cmt.list);
-  };
-
   const createComment = async (e: OnClick, rate: Rate, input: any) => {
     const author = rate.author || "";
     if (!userId) {
@@ -103,12 +103,15 @@ export const RateItem = ({ id, userId, data, resource, disable, rateRange, react
     };
     const rs = await commentService.comment(id, author, userId, comment);
     if (rs) {
-      storage.message("Your review is submited");
+      storage.message("Your comment is submited");
       setInput("");
       setCommentCount(commentCount + 1);
       setIsReplies(false);
       setIsShowComment(true);
-      loadComments(e, data);
+      comment.authorName = user.username
+      comment.userId = userId
+      setComments([...comments, comment])
+
     }
   };
 
@@ -122,8 +125,20 @@ export const RateItem = ({ id, userId, data, resource, disable, rateRange, react
         comment: input,
         time: new Date(),
       };
-      await commentService.updateComment(id, author, userId, commentId, newComment);
-      loadComments(e, comment);
+      commentService.updateComment(id, author, userId, commentId, newComment)
+        .then((res) => {
+          if (res <= 0) {
+            return storage.alert("error")
+          }
+
+          const updatedIndex = comments.findIndex(i => i.commentId === commentId)
+          const newComments = [...comments]
+          newComments[updatedIndex].comment = input
+          setComments(newComments)
+        })
+        .catch((error) => {
+          handleError(error)
+        });
     }
   };
 
@@ -134,8 +149,11 @@ export const RateItem = ({ id, userId, data, resource, disable, rateRange, react
       if (res > 0) {
         storage.message("Removed successfully!");
         setCommentCount(commentCount - 1);
-        loadComments(e, comment);
+
+        setComments([...comments.filter(val => val.commentId !== comment.commentId)])
+        return
       }
+      return storage.alert("Error")
     });
   };
 
@@ -168,10 +186,8 @@ export const RateItem = ({ id, userId, data, resource, disable, rateRange, react
               {commentCount !== 0 && (
                 <span
                   className="btn-reply"
-                  onClick={(e) => {
-                    loadComments(e, data);
-                    setIsShowComment(!isShowComment);
-                  }}
+                  onClick={() => setIsShowComment(!isShowComment)
+                  }
                 >
                   {commentCount === 1
                     ? isShowComment
@@ -191,9 +207,9 @@ export const RateItem = ({ id, userId, data, resource, disable, rateRange, react
       </div>
 
       {isShowComment &&
-        comment &&
-        comment.length > 0 &&
-        comment.map((cmt: Comment) => {
+        comments &&
+        comments.length > 0 &&
+        comments.map((cmt: Comment) => {
           return (
             <CommentItem
               key={cmt.commentId}

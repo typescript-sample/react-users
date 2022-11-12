@@ -16,7 +16,8 @@ import {
   useLocationComment,
   useLocationRate,
   useLocationReaction,
-  useLocations
+  useLocations,
+  useLocationSearchRate
 } from "../service";
 import { Overview } from "./overview";
 import { LocationPhoto } from "./photo";
@@ -47,6 +48,7 @@ export const LocationPage = () => {
   const [follow, setFollow] = useState<boolean>(false);
   const followService = useFollowLocationResponse();
   const rateService = useLocationRate();
+  const searchRateService = useLocationSearchRate();
   const reactionService = useLocationReaction();
   const commentService = useLocationComment();
 
@@ -254,6 +256,7 @@ export const LocationPage = () => {
             userId={userId}
             rateRange={5}
             rateService={rateService}
+            searchRateService={searchRateService}
             reactionService={reactionService}
             commentService={commentService}
           />

@@ -9,7 +9,7 @@ import { LocationService } from './location/location';
 import { MasterDataClient, MasterDataService } from './master-data';
 
 import { CinemaClient, CinemaService } from './cinema';
-import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService } from "../../review";
+import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService, SearchRateClient, SearchRateService } from "../../review";
 
 export * from './cinema';
 export * from './category';
@@ -33,6 +33,7 @@ class ApplicationContext {
   masterDataService?: MasterDataService;
   locationService?: LocationService;
   rateService?: RateService;
+  searchRateService?:SearchRateService;
   reactionService?: ReactionService;
   commentService?: CommentService;
   constructor() {
@@ -65,6 +66,14 @@ class ApplicationContext {
       this.rateService = new RateClient(httpRequest, c.cinema_rate_url);
     }
     return this.rateService;
+  }
+
+  getCinemaSearchRateService(): SearchRateService {
+    if (!this.searchRateService) {
+      const c = this.getConfig();
+      this.searchRateService = new SearchRateClient(httpRequest, c.cinema_rate_url);
+    }
+    return this.searchRateService;
   }
 
   getCinemaReactionService(): ReactionService {
@@ -126,7 +135,9 @@ export function useCinema(): CinemaService {
 export function useCinemaRate(): RateService {
   return context.getCinemaRateService();
 }
-
+export function useCinemaSearchRate():SearchRateService{
+  return context.getCinemaSearchRateService();
+}
 export function useCinemaReaction(): ReactionService {
   return context.getCinemaReactionService();
 }

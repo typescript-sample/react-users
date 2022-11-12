@@ -4,7 +4,7 @@ import { options, storage } from "uione";
 
 import { FilmClient, FilmService } from "./film";
 import { SavedItemClient, SavedItemService } from "./saved-film";
-import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService } from "../../review";
+import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService, SearchRateClient, SearchRateService } from "../../review";
 
 const httpRequest = new HttpRequest(axios, options);
 export interface Config {
@@ -16,6 +16,7 @@ class ApplicationContext {
   filmService?: FilmService;
   savedItemService?: SavedItemService;
   rateService?: RateService;
+  searchRateService?:SearchRateService;
   reactionService?: ReactionService;
   commentService?: CommentService;
 
@@ -55,6 +56,13 @@ class ApplicationContext {
     return this.rateService;
   }
 
+  getFilmSearchRateService():SearchRateService{
+    if (!this.searchRateService) {
+      const c = this.getConfig();
+      this.searchRateService = new SearchRateClient(httpRequest, c.film_rate_url);
+    }
+    return this.searchRateService;
+  }
   getFilmReactionService(): ReactionService {
     if (!this.reactionService) {
       const c = this.getConfig();
@@ -84,6 +92,9 @@ export function useSavedItemResponse(): SavedItemService {
 
 export function useFilmRate(): RateService {
   return context.getFilmRateService();
+}
+export function useFilmSearchRate(): SearchRateService {
+  return context.getFilmSearchRateService();
 }
 
 export function useFilmReaction(): ReactionService {

@@ -1,8 +1,8 @@
 import { faEllipsisVertical, faPencil, faTrash, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
-import { useState } from "react";
-import { storage, StringMap } from "uione";
+import { useEffect, useState } from "react";
+import { handleError, storage, StringMap } from "uione";
 import "../rate.css";
 import { OnClick } from "react-hook-core";
 import { CommentThread, CommentThreadService } from "./client/commentthread";
@@ -10,21 +10,25 @@ import { CommentItem } from "./commentItem";
 import { CommentThreadReply, CommentThreadReplyService } from "./client/commentthreadreply";
 import like from "../assets/images/like.svg";
 import likeFilled from "../assets/images/like_filled.svg";
+import { CommentReactionService } from "./client";
 
 export interface Props {
   disable: boolean
   userId: string
-  id: string
   data: CommentThread
+  id: string
   commentThreadService: CommentThreadService
   commentThreadReplyService: CommentThreadReplyService
+  commentThreadReactionService: CommentReactionService
+  commentReactionService: CommentReactionService
   resource: StringMap
   updateCommentThread: (e: OnClick, input: string, comment: CommentThread) => Promise<void>
   removeCommentThread: (e: OnClick, commentId: string) => Promise<void>
 }
-export const CommentThreadItem = ({ disable, id, resource, data, commentThreadReplyService, updateCommentThread, removeCommentThread, userId }: Props) => {
-  // const maxLengthReviewText = 300;
-  // const [more, setMore] = useState(false);
+export const CommentThreadItem = ({ disable = false, resource, id, data, commentReactionService, commentThreadReactionService, commentThreadReplyService, updateCommentThread, removeCommentThread, userId }: Props) => {
+  const maxLengthReviewText = 300;
+  const [more, setMore] = useState(false);
+
   const [isEdit, setIsEdit] = useState(false);
   const [commentThread, setCommentThread] = useState(data.comment || "");
   const [showActions, setShowActions] = useState(false)
@@ -33,82 +37,84 @@ export const CommentThreadItem = ({ disable, id, resource, data, commentThreadRe
   const [input, setInput] = useState("")
   const [replyCount, setReplyCount] = useState(data.replyCount || 0)
   const [replycomments, setReplyComments] = useState<CommentThreadReply[]>([])
-  const [isDisable, setDisable] = useState(disable)
+  const [isDisable, setIsDisable] = useState<boolean>(disable)
   const [likeCount, setLikeCount] = useState<number>(data.usefulCount || 0);
-
-  // const formatReviewText = (text: string) => {
-  //   if (text && text.length > maxLengthReviewText) {
-  //     let textSub = text.substring(0, maxLengthReviewText);
-  //     textSub = textSub + " ...";
-  //     const a = (
-  //       <span>
-  //         {resource.review} {textSub}{" "}
-  //         <span className="more-reviews" onClick={(e) => setMore(!more)}>
-  //           More
-  //         </span>
-  //       </span>
-  //     );
-  //     return a;
-  //   } else {
-  //     return (
-  //       <span>
-  //         {resource.review} {text}
-  //       </span>
-  //     );
-  //   }
-  // };
-  const loadComments = async (commentThreadId?: string) => {
-    if (commentThreadId) {
-      const res = await commentThreadReplyService.getReplyComments(commentThreadId)
+  useEffect(() => {
+    commentThreadReplyService.getReplyComments(data.commentId, userId).then(res => {
       setReplyComments(res)
+    })
+  }, [])
+
+  const formatReviewText = (text: string) => {
+    if (text && text.length > maxLengthReviewText) {
+      let textSub = text.substring(0, maxLengthReviewText);
+      textSub = textSub + " ...";
+      const a = (
+        <span>
+          {resource.review} {textSub}{" "}
+          <span className="more-reviews" onClick={(e) => setMore(!more)}>
+            More
+          </span>
+        </span>
+      );
+      return a;
+    } else {
+      return (
+        <span>
+          {resource.review} {text}
+        </span>
+      );
     }
-  }
-  const toggleComments = (commentThreadId?: string) => {
-    loadComments(commentThreadId)
-    setShowComment(!isShowComment)
-  }
-  const removeReplyComment = async (e: OnClick, comment: CommentThreadReply) => {
+  };
+
+  const removeReplyComment = async (e: OnClick, commentThreadId: string, commentId: string) => {
     e.preventDefault()
-    const res = await commentThreadReplyService.removeComment(comment.commentThreadId, comment.commentId)
+    const res = await commentThreadReplyService.removeComment(commentThreadId, commentId)
     if (res <= 0) {
       return storage.alert("error")
     }
     storage.message("delete comment submited")
     setReplyCount(replyCount - 1)
-    loadComments(data.commentId)
+    const newReplies = replycomments.filter(item => item.commentId !== commentId)    
+    setReplyComments(newReplies)
     return res
   }
+
   const createComment = async (e: OnClick, input: string, parent?: string) => {
     e.preventDefault()
+
+    const comment: CommentThreadReply = {
+      comment: input,
+      time: new Date(),
+      parent: parent,
+      commentId: "",
+      commentThreadId: data.commentId,
+    }
+    return commentThreadReplyService.reply(id, userId, data.commentId, comment).then(res => {
+      comment.commentId = res
+      comment.userId = userId
+      comment.author = userId
+      const user = storage.user()
+      comment.authorName = user && user.username ? user.username : "anonymous"
+      setReplyComments([...replycomments, comment])
+      setReplyCount(replyCount + 1)
+    });
+
+  }
+  const reply = async (e: OnClick, input: string) => {
     if (!userId) {
       return storage.alert("You must sign in")
     }
-    if (data && data.commentId) {
-      const comment: CommentThreadReply = {
-        comment: input,
-        time: new Date(),
-        parent: parent,
-        commentId: "",
-        commentThreadId: ""
-      }
-      return commentThreadReplyService.reply(id, userId, data.commentId, comment).then(res => {
-        if (res > 0) {
-          setReplyCount(replyCount + 1)
-        }
-        return res
-      });
-    }
-  }
-  const reply = async (e: OnClick, input: string) => {
-    const rs = await createComment(e, input)
-    if (rs) {
+    createComment(e, input).then(() => {
       storage.message("your comment is submited")
       setInput("")
-      setReplyCount(replyCount + 1)
       setShowReply(false)
       setShowComment(true)
-      loadComments(data.commentId)
-    }
+
+    }).catch(err => {
+      return storage.alert(err)
+    })
+
   }
   const updateComment = async (e: OnClick, input: string, comment: CommentThreadReply) => {
     if (comment.author !== userId) {
@@ -120,22 +126,51 @@ export const CommentThreadItem = ({ disable, id, resource, data, commentThreadRe
     const newComment: CommentThreadReply = {
       commentId: comment.commentId,
       comment: input,
-      time: new Date(),
-      commentThreadId: ""
+      updatedAt: new Date(),
     };
 
     const res = await commentThreadReplyService.updateComment(comment.commentId, newComment);
     if (res <= 0) {
       return storage.alert("Error")
     }
-    await loadComments(comment.commentThreadId);
+
+    newComment.Histories = newComment.Histories && newComment.Histories.length > 0 ?
+      [...newComment.Histories, { comment: comment.comment, time: comment.updatedAt ?? comment.time }]
+      : [{ comment: comment.comment, time: comment.updatedAt ?? comment.time }]
+
     return storage.message("submited successfully")
   }
-  const addUseful = (e:OnClick, data: CommentThread)=>{
-
+  const addUseful = (e: OnClick, data: CommentThread) => {
+    const author = data.author || "";
+    if (!userId) {
+      return storage.alert("You must sign in");
+    }
+    commentThreadReactionService.setUseful(data.commentId, author, userId).then(res => {
+      if (res <= 0) {
+        return storage.alert("error")
+      } else {
+        setIsDisable(!isDisable);
+        setLikeCount(likeCount + 1);
+      }
+    }).catch(err => {
+      handleError(err)
+    });
   }
 
-  const removeUseful = (e:OnClick, data:CommentThread)=>{
+  const removeUseful = (e: OnClick, data: CommentThread) => {
+    const author = data.author || "";
+    if (!userId) {
+      return storage.alert("You must sign in");
+    }
+    commentThreadReactionService.removeUseful(data.commentId, author, userId).then(res => {
+      if (res <= 0) {
+        return storage.alert("error")
+      }
+      setIsDisable(!isDisable);
+      setLikeCount(likeCount - 1);
+    }).catch(err => {
+      handleError(err)
+    });
 
   }
 
@@ -177,7 +212,7 @@ export const CommentThreadItem = ({ disable, id, resource, data, commentThreadRe
                   </div>
                 </div>
               </div>) : (
-                <p className="comment">{data.comment}</p>
+                <p className="comment">{formatReviewText(data.comment)}</p>
               )}
               <div className="footer">
                 <div className="left">
@@ -196,7 +231,7 @@ export const CommentThreadItem = ({ disable, id, resource, data, commentThreadRe
                 </div>
                 <div className="right">
                   {replyCount !== 0 && (
-                    <span className="btn-reply" onClick={() => toggleComments(data.commentId)}>
+                    <span className="btn-reply" onClick={ replyCount > 0 ? () =>  setShowComment(!isShowComment) : ()=>{}}>
                       {isShowComment ? "Hide Comment" : `Show ${replyCount} Comment`}
                     </span>
                   )
@@ -240,8 +275,8 @@ export const CommentThreadItem = ({ disable, id, resource, data, commentThreadRe
           </div>
         </div>
 
-        {isShowComment && replycomments && replycomments.map((item, index) =>
-          (<CommentItem key={index} isReplyEnable cmt={item} userId={userId} removeComment={removeReplyComment} updateComment={updateComment} createComment={createComment} loadComments={loadComments} commentThreadId={item.commentThreadId} />)
+        {isShowComment && replycomments && replycomments.map((item) =>
+          (<CommentItem key={item.commentId} isReplyEnable isUsefulEnable cmt={item} userId={userId} removeComment={removeReplyComment} updateComment={updateComment} createComment={createComment} commentThreadId={item.commentThreadId} disable={item.disable} commentReactionService={commentReactionService} />)
         )}
         {isReply && (
           <div className="comments-container">

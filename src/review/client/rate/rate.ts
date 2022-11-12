@@ -10,6 +10,7 @@ export interface Rate extends Tracking {
   review?: string;
   usefulCount?: number;
   replyCount?: number;
+  imageURL?:string;
 }
 
 export class RateFilter implements Filter {
@@ -34,10 +35,13 @@ export class RateFilter implements Filter {
   page?: number;
 }
 
-export interface RateService extends SearchService<Rate, RateFilter> {
+export interface RateService{
   rate(id: string, author: string, obj: Rate, ctx?: any): Promise<boolean>;
 }
 
+export interface SearchRateService extends SearchService<Rate,RateFilter>{
+  
+} 
 export const rateModel: Attributes = {
   id: {
     key: true,

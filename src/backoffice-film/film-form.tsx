@@ -19,8 +19,6 @@ import {
 } from "@mui/material";
 import { SuggestionService } from 'suggestion-service';
 import { useNavigate } from "react-router-dom";
-import { FileUpload } from "../core/upload";
-import { config } from "../config";
 import Axios from "axios";
 import { HttpRequest } from "axios-core";
 const httpRequest = new HttpRequest(Axios, options);

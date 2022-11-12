@@ -2,34 +2,26 @@ import { OnClick } from "react-hook-core";
 import { storage, StringMap } from "uione";
 import { CommentThreadItem } from "./comment-thread-item";
 import "../rate.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CommentThread, CommentThreadService } from "./client/commentthread";
-import { CommentThreadReplyService } from "./client";
+import { CommentReactionService, CommentThreadReplyService } from "./client";
 
 export interface Props {
+  user:any;
   id: string;
   list: CommentThread[];
+  loadCommentThreads: any;
   commentThreadService: CommentThreadService;
   commentThreadReplyService: CommentThreadReplyService;
+  commentThreadReactionService: CommentReactionService;
+  commentReactionService: CommentReactionService
   resource: StringMap;
   userId: string;
 }
 
-export const CommentThreadComponent = ({ list, resource, id, commentThreadService, commentThreadReplyService, userId }: Props) => {
-  const [commentThreads, setCommentThreads] = useState<CommentThread[]>(list);
-  const loadComments = async (e: OnClick, id: string) => {
-    //const cmt = await commentService.getComments(id, String(data.author));
-    const cmt = await commentThreadService.search({ id: id });
-    setCommentThreads(cmt.list);
-  };
-  useEffect(() => {
-    const load = async () => {
-      const cmt = await commentThreadService.search({ id: id });
-      setCommentThreads(cmt.list);
+export const CommentThreadComponent = ({ list, resource, id, commentThreadService, commentThreadReplyService, commentReactionService, commentThreadReactionService, userId }: Props) => {
 
-    }
-    load()
-  }, [list])
+  const [commentThreads, setCommentThreads] = useState<CommentThread[]>(list);
   const updateCommentThread = async (e: OnClick, input: string, comment: CommentThread) => {
     if (comment.author !== userId) {
       return storage.alert("...");
@@ -44,29 +36,48 @@ export const CommentThreadComponent = ({ list, resource, id, commentThreadServic
     };
 
     const res = await commentThreadService.updateComment(comment.commentId, newComment);
-    if (res === -1) {
-      return storage.alert("Error")
+    if(res<=0){
+      return storage.alert("error")
     }
-    await loadComments(e, id);
+    const obj = [...commentThreads]
+    const itemIndex = obj.findIndex(obj => obj.commentId === newComment.commentId)
+    obj[itemIndex].comment = newComment.comment
+    obj[itemIndex].histories = newComment.histories && newComment.histories.length>0 ?[...newComment.histories,{comment:comment.comment,time:comment.time}] : [{comment:comment.comment,time:comment.time}]
+    obj[itemIndex].updatedAt = newComment.updatedAt
+    setCommentThreads(obj)
     return storage.message("submited successfully")
   };
   const removeCommentThread = async (e: OnClick, commentId: string) => {
     if (commentId === null || commentId === undefined || commentId.length === 0) return storage.alert("...")
     const res = await commentThreadService.removeComment(commentId)
-    if (res < 0) {
+    if (res <= 0) {
       return storage.alert("Error")
     }
-    await loadComments(e, id);
+    
+    setCommentThreads(commentThreads.filter(item => item.commentId !== commentId))
     return storage.message("submited successfully")
 
   }
   return (
     <>
+
       <ul className="row list-view">
         {
           commentThreads && commentThreads.length > 0 && commentThreads.map((i: any) => {
             return (
-              <CommentThreadItem disable userId={userId} key={i.time} commentThreadService={commentThreadService} commentThreadReplyService={commentThreadReplyService} resource={resource} data={i} id={id} updateCommentThread={updateCommentThread} removeCommentThread={removeCommentThread} />
+              <CommentThreadItem
+                id={id}
+                disable={i.disable}
+                userId={userId}
+                key={i.time}
+                commentThreadReactionService={commentThreadReactionService}
+                commentThreadService={commentThreadService}
+                commentThreadReplyService={commentThreadReplyService}
+                commentReactionService={commentReactionService}
+                resource={resource} data={i}
+                updateCommentThread={updateCommentThread}
+                removeCommentThread={removeCommentThread}
+              />
             )
           })
         }

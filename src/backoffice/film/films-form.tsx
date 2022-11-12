@@ -4,7 +4,7 @@ import { checked, OnClick, PageSizeSelect, SearchComponentState, useSearch, valu
 import { useNavigate } from 'react-router-dom';
 import Pagination from 'reactx-pagination';
 import { inputSearch } from 'uione';
-import { useFilm } from './service';
+import { getFilmService } from './service';
 import { Film, FilmFilter } from './service/film';
 
 interface FilmSearch extends SearchComponentState<Film, FilmFilter> {
@@ -12,12 +12,13 @@ interface FilmSearch extends SearchComponentState<Film, FilmFilter> {
 }
 
 const filmFilter: FilmFilter = {
-  filmId: '',
+  id: '',
   title: '',
   status: [],
   description: '',
   imageUrl: '',
   trailerUrl: '',
+  language:''
 };
 
 const initialState: FilmSearch = {
@@ -30,7 +31,7 @@ export const FilmsForm = () => {
   const refForm = React.useRef();
   const navigate = useNavigate();
   const { state, resource, component, changeView, updateState, search, sort, toggleFilter, pageChanged, pageSizeChanged }
-    = useSearch<Film, FilmFilter, FilmSearch>(refForm, initialState, useFilm(), inputSearch());
+    = useSearch<Film, FilmFilter, FilmSearch>(refForm, initialState, getFilmService(), inputSearch());
   component.viewable = true;
   component.editable = true;
 
@@ -110,16 +111,16 @@ export const FilmsForm = () => {
               <thead>
                 <tr>
                   <th>{resource.sequence}</th>
-                  <th data-field='filmId'><button type='button' id='sortFilmId' onClick={sort}>{resource.film_id}</button></th>
+                  <th data-field='id'><button type='button' id='sortFilmId' onClick={sort}>{resource.film_id}</button></th>
                   <th data-field='title'><button type='button' id='sortTitle' onClick={sort}>{resource.title}</button></th>
                   <th data-field='status'><button type='button' id='sortStatus' onClick={sort}>{resource.status}</button></th>
                 </tr>
               </thead>
               {list && list.length > 0 && list.map((film, i) => {
                 return (
-                  <tr key={i} onClick={e => edit(e, film.filmId)}>
+                  <tr key={i} onClick={e => edit(e, film.id)}>
                     <td className='text-right'>{(film as any).sequenceNo}</td>
-                    <td>{film.filmId}</td>
+                    <td>{film.id}</td>
                     <td>{film.title}</td>
                     <td>{film.status}</td>
                   </tr>
@@ -130,9 +131,9 @@ export const FilmsForm = () => {
           {component.view !== 'table' && <ul className='row list-view'>
             {list && list.length > 0 && list.map((film, i) => {
               return (
-                <li key={i} className='col s12 m6 l4 xl3' onClick={e => edit(e, film.filmId)}>
+                <li key={i} className='col s12 m6 l4 xl3' onClick={e => edit(e, film.id)}>
                   <section>
-                    <img src={film.imageUrl && film.imageUrl.length > 0 ? film.imageUrl : ''} className='round-border' alt='film'/>
+                    <img src={film.imageURL && film.imageURL.length > 0 ? film.imageURL : ''} className='round-border' alt='film'/>
                     <div>
                       <h3 className={film.status === 'I' ? 'inactive' : ''}>{film.title}</h3>
                     </div>

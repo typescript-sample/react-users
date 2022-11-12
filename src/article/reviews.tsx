@@ -10,20 +10,22 @@ export interface Props {
   rateRange: number;
   list: Rate[];
   resource: any;
+  user:any
 }
 
 export const Review = (props: Props) => {
-  const { id, list, reactionService, commentService, userId , rateRange, resource} = props;
+  const { id, list, reactionService, commentService, userId , rateRange, resource,user} = props;
 
   return (
     <>
       <ul className="row list-view">
         {list &&
           list.length > 0 &&
-          list.map((i: any) => {
+          list.map((i: any,index) => {
             return (
               <RateItem
-                key={i.time}
+                user={user}
+                key={index}
                 id={id}
                 userId={userId}
                 rateRange={rateRange}

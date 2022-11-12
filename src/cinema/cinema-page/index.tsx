@@ -13,7 +13,7 @@ import { ModalSelectCover } from '../../my-profile/modal-select-cover';
 import { CinemaOverview } from './overview';
 import { CinemaPhoto } from './photo';
 import { Cinema } from '../service/cinema'
-import { useCinema, useCinemaComment, useCinemaRate, useCinemaReaction } from '../service/index'
+import { useCinema, useCinemaComment, useCinemaRate, useCinemaReaction, useCinemaSearchRate } from '../service/index'
 import { Review } from "../../review";
 
 
@@ -33,6 +33,7 @@ export const CinemaPage = () => {
   const resource = useResource();
   const cinemaService = useCinema();
   const rateService = useCinemaRate();
+  const searchRateService = useCinemaSearchRate();
   const reactionService = useCinemaReaction();
   const commentService = useCinemaComment();
   const userId: string | undefined = storage.getUserId() || "";
@@ -169,7 +170,7 @@ export const CinemaPage = () => {
           </header>
           <div className='row'>
             <CinemaOverview cinema={cinema} />
-            <Review i={cinema} get={getCinema} id={id} userId={userId} rateRange={5} rateService={rateService} reactionService={reactionService} commentService={commentService}/>
+            <Review i={cinema} get={getCinema} id={id} userId={userId} rateRange={5} rateService={rateService} searchRateService={searchRateService} reactionService={reactionService} commentService={commentService}/>
             <CinemaPhoto cinema={cinema} setCinema={setCinema}/>
           </div>
         </form>
