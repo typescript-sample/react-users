@@ -28,15 +28,15 @@ import { SignupForm } from "./authentication/signup-form";
 
 import { CategoriesForm } from "./backoffice/categories-form";
 import { CategoryForm } from "./backoffice/category-form";
-import { FilmForm } from "./backoffice-film/film-form";
-import { FilmsForm } from "./backoffice-film/films-form";
+import { FilmForm } from "./backoffice/film/film-form";
+import { FilmsForm } from "./backoffice/film/films-form";
 import { FilmForm as Film } from "./film/film-form";
 import { FilmsForm as Films } from "./film/films-form";
 
 import { LocationForm } from "./backoffice/location-form";
 
-import { BLocationForm } from "./backoffice-location/location-form";
-import { BLocationsForm } from "./backoffice-location/locations-form";
+import { BLocationForm } from "./backoffice/location/location-form";
+import { BLocationsForm } from "./backoffice/location/locations-form";
 
 import { LocationPage } from "./location/location-page";
 import { LocationsPage } from "./location/locations-page";
@@ -49,8 +49,8 @@ import { UsersPage } from "./profile/users-page";
 import { CinemasForm } from "./cinema/cinemas-form";
 import { CinemaPage } from "./cinema/cinema-page";
 
-import { BCinemasForm } from "./backoffice-cinema/cinemas-form";
-import { BCinemaForm } from "./backoffice-cinema/cinema-form";
+import { BCinemasForm } from "./backoffice/cinema/cinemas-form";
+import { BCinemaForm } from "./backoffice/cinema/cinema-form";
 
 // import { BCinemasForm } from "./backoffice/cinemas-form";
 // import { BCinemaForm } from "./backoffice/cinema-form";
@@ -80,13 +80,13 @@ import { BJobForm } from './backoffice-job/job-form'
 import { JobsForm } from './jobs/jobs-form'
 import { JobForm } from './jobs/job-form'
 import { JobPage } from './jobs/job-page'
-import { BRoomsForm } from "./backoffice-room/rooms-form";
-import { BRoomForm } from "./backoffice-room/room-form";
+import { BRoomsForm } from "./backoffice/room/rooms-form";
+import { BRoomForm } from "./backoffice/room/room-form";
 import { RoomsForm } from "./room/rooms-form";
 import { RoomForm } from "./room/room-form";
 
-import { BMusicsForm } from './backoffice-music/musics-form'
-import { BMusicForm } from './backoffice-music/music-form'
+import { BMusicsForm } from './backoffice/music/musics-form'
+import { BMusicForm } from './backoffice/music/music-form'
 // import { MusicsForm } from './musics/musics-form'
 // import { MusicForm } from './musics/music-form'
 // import { MusicPage } from './musics/music-page'
@@ -122,9 +122,9 @@ import "./assets/css/theme.css";
 import "./assets/css/dark.css";
 import { MusicsForm } from "./music/musics-form";
 import { MusicForm } from "./music/music-form";
-import { FilmUpload } from "./backoffice-film/filmupload";
-import { LocationUpload } from "./backoffice-location/location-upload";
-import { CinemaUpload } from "./backoffice-cinema/cinema-upload";
+import { FilmUpload } from "./backoffice/film/filmupload";
+import { LocationUpload } from "./backoffice/location/location-upload";
+import { CinemaUpload } from "./backoffice/cinema/cinema-upload";
 import { CompanyUpload } from "./backoffice-company/company-upload";
 import { LoveSongForm } from "./music/love-song-form";
 import { PlaylistForm } from "./music/playlist-form";
@@ -198,8 +198,6 @@ function App() {
             path="admin/roles/assign/:id"
             element={<RoleAssignmentForm />}
           />
-
-         
           <Route path="backoffice/cinemas/add" element={<BCinemaForm />} />
           <Route path="backoffice/cinemas" element={<BCinemasForm />} />
           <Route path="backoffice/cinemas/edit/:id" element={<BCinemaForm />} />
