@@ -204,7 +204,7 @@ export function UserPage() {
         </header>
         <div className='row'>
 
-          <Review i={user} get={getUser} id={id} userId={userId} rateRange={10} rateService={rateService} searchRateService={searchRateService} reactionService={reactionService} commentService={commentService} />
+          <Review i={user} get={getUser} id={id} userId={userId} rateRange={10} rateService={rateService} searchRateService={searchRateService} reactionService={reactionService} commentService={commentService}/>
         </div>
         {/* <Appreciations /> */}
        {!window.location.pathname.includes('review') &&  window.location.pathname.includes('appreciation')&& <ApprecitaionPage id={id} userId={userId} />}

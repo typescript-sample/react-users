@@ -4,8 +4,8 @@ import { CommentThreadItem } from "./comment-thread-item";
 import "../rate.css";
 import { useState } from "react";
 import { CommentThread, CommentThreadService } from "./client/commentthread";
-import { CommentReactionService, CommentThreadReplyService } from "./client";
-
+import {  CommentThreadReplyService } from "./client";
+import {CommentReactionService} from "reaction-client"
 export interface Props {
   user:any;
   id: string;

@@ -51,7 +51,6 @@ export const LocationPage = () => {
   const searchRateService = useLocationSearchRate();
   const reactionService = useLocationReaction();
   const commentService = useLocationComment();
-
   useEffect(() => {
     getLocation(id ?? "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -88,7 +87,6 @@ export const LocationPage = () => {
   };
   const handleFollow = async (e: any) => {
     e.preventDefault();
-    console.log('test')
     if (userId) {
       if (!follow) {
         const rep = await followService.follow(userId, id);

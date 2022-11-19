@@ -7,7 +7,7 @@ import {
 } from "./item";
 import { CategoryClient, CategoryService } from "./category";
 import { SavedItemClient, SavedItemService } from "./saved-item";
-import { CommentClient, CommentService, ReactionClient, ReactionService } from "../../review";
+import { CommentClient, CommentService, ReactionClient, ReactionService } from "reaction-client";
 import { ResponseService, ResponseClient } from "./response";
 
 export * from "./item";

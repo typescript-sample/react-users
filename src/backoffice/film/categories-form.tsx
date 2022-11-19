@@ -4,8 +4,8 @@ import { checked, OnClick, PageSizeSelect, SearchComponentState, useSearch, valu
 import { useNavigate } from 'react-router-dom';
 import { Pagination } from 'reactx-pagination';
 import { inputSearch } from 'uione';
-import { useCategory } from './service';
-import { Category, CategoryFilter } from './service/category';
+import { useCategory } from '../service';
+import { Category, CategoryFilter } from '../service/category';
 
 interface CategorySearch extends SearchComponentState<Category, CategoryFilter> {
   statusList: ValueText[];

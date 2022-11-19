@@ -13,7 +13,6 @@ export const FilmForm = () => {
   const searchRateService = useFilmSearchRate()
   const reactionService = useFilmReaction();
   const commentService = useFilmComment();
-
   const userId: string | undefined = storage.getUserId() || "";
   const [film, setFilm] = useState<Film>();
 

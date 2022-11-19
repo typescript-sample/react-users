@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { RatingStar } from "reactx-rate";
-import { getResource, inputSearch, storage } from "uione";
-import { Rate, RateFilter } from "../review/client";
+import { getResource, handleError, inputSearch, storage } from "uione";
+import { Rate, RateFilter, ShortRate } from "web-clients";
 import { DataPostRate, PostRateForm } from "../review/postRate";
 import {
   OnClick,
@@ -36,9 +36,9 @@ import {
   PostCommentThreadForm,
 } from "../review/post-comment-thread-form";
 
-interface RateSearch extends SearchComponentState<Rate, RateFilter> {}
+interface RateSearch extends SearchComponentState<Rate, RateFilter> { }
 interface CommentThreadSearch
-  extends SearchComponentState<CommentThread, CommentThreadFilter> {}
+  extends SearchComponentState<CommentThread, CommentThreadFilter> { }
 export const ArticleForm = () => {
   const refForm = useRef();
   const refEdit = useRef<any>();
@@ -52,8 +52,8 @@ export const ArticleForm = () => {
   const user = storage.user();
   const { id = "" } = useParams();
   const navigate = useNavigate();
-  const [rates, setRates] = useState<Rate[]>([]);
-  const [commentThreads, setCommentThreads] = useState<CommentThread[]>([]);
+  // const [rates, setRates] = useState<Rate[]>([]);
+  // const [commentThreads, setCommentThreads] = useState<CommentThread[]>([]);
   const articleService = useArticle();
   const rateService = useArticleRate();
   const rateSearchService = useArticleSearchRate();
@@ -128,9 +128,11 @@ export const ArticleForm = () => {
       pageSize: n,
     };
     component.sortField = "time desc";
-    const res = await rateSearchService.search(state.filter);
+    rateSearchService.search(state.filter).then(res => {
+      // setRates(res.list);
+      setState({ list: res.list })
+    }).catch(err => handleError(err));
 
-    setRates(res.list);
   };
 
   const pageSizeChanged = async (e: any) => {
@@ -151,20 +153,28 @@ export const ArticleForm = () => {
       if (!userId || !article) {
         return storage.alert("Please sign in to review");
       }
-      const rate: Rate = {
+      const rate: ShortRate = {
         rate: data.rate,
         review: data.review,
         time: new Date(),
       };
       const res = await rateService.rate(id, userId, rate);
       if (res == true) {
-        rate.author = userId;
-        rate.id = id;
         storage.message("Your review is submited");
         setIsOpenRateModal(false);
+        const newRate: Rate = {
+          rate: data.rate,
+          review: data.review,
+          time: rate.time,
+          author: userId,
+          id: id,
+          usefulCount: 0,
+          replyCount: 0
+        }
         setState({
-          list:
-            state.list && state.list.length ? [...state.list, rate] : [rate],
+          list: state.list && state.list.length ? [
+            ...state.list, newRate]
+            : [newRate],
         });
       }
     } catch (err) {
@@ -217,7 +227,7 @@ export const ArticleForm = () => {
       sort: sortBy,
       pageSize: n,
     });
-    commentThreadSearch.setState({list: res.list})
+    commentThreadSearch.setState({ list: res.list })
   };
 
   const postCommentThread = async (data: DataPostComment): Promise<void> => {
@@ -361,11 +371,11 @@ export const ArticleForm = () => {
             id="page-select-rate"
           />
           <Sort
-          load={loadCommentThread}
+            load={loadCommentThread}
             sort={commentThreadSearch.sort}
             data={[
-              { value: "time", text: "Newest First"},
-              { value: "usefulCount", text: "Top Like"},
+              { value: "time", text: "Newest First" },
+              { value: "usefulCount", text: "Top Like" },
             ]}
           />
         </div>

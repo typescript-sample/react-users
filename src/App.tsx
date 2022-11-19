@@ -26,14 +26,12 @@ import { ResetPasswordForm } from "./authentication/reset-password-form";
 import { SigninForm } from "./authentication/signin-form";
 import { SignupForm } from "./authentication/signup-form";
 
-import { CategoriesForm } from "./backoffice/categories-form";
-import { CategoryForm } from "./backoffice/category-form";
+import { CategoriesForm } from "./backoffice/film/categories-form";
+import { CategoryForm } from "./backoffice/film/category-form";
 import { FilmForm } from "./backoffice/film/film-form";
 import { FilmsForm } from "./backoffice/film/films-form";
 import { FilmForm as Film } from "./film/film-form";
 import { FilmsForm as Films } from "./film/films-form";
-
-import { LocationForm } from "./backoffice/location-form";
 
 import { BLocationForm } from "./backoffice/location/location-form";
 import { BLocationsForm } from "./backoffice/location/locations-form";
@@ -51,9 +49,6 @@ import { CinemaPage } from "./cinema/cinema-page";
 
 import { BCinemasForm } from "./backoffice/cinema/cinemas-form";
 import { BCinemaForm } from "./backoffice/cinema/cinema-form";
-
-// import { BCinemasForm } from "./backoffice/cinemas-form";
-// import { BCinemaForm } from "./backoffice/cinema-form";
 
 import { CompaniesForm } from "./backoffice-company/companies-form";
 import { CompanyForm } from "./backoffice-company/company-form";
@@ -239,8 +234,8 @@ function App() {
 
           <Route path="locations" element={<LocationsPage />} />
           <Route path="my-location" element={<MyLocation />} />
-          <Route path="locations/add" element={<LocationForm />} />
-          <Route path="locations/edit/:id" element={<LocationForm />} />
+          {/* <Route path="locations/add" element={<LocationForm />} /> */}
+          {/* <Route path="locations/edit/:id" element={<LocationForm />} /> */}
           <Route path="locations/:id" element={<LocationPage />} />
           <Route path="locations/:id/review" element={<LocationPage />} />
           <Route path="locations/:id/photo" element={<LocationPage />} />

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { OnClick } from 'react-hook-core';
 import { storage, StringMap } from 'uione';
-import { Comment } from '../review';
+import { Comment } from 'reaction-client';
 import { CommentItem } from './comment-item';
 import { useComment } from './service';
 import { Rates } from './service/rate/rate';
@@ -83,13 +83,12 @@ export const RateItem = ({ data, maxLengthReviewText, resource, load, reactionSe
       setCommentCount(commentCount + 1);
       setIsReplies(false);
       setIsShowComment(true);
-      showComments(e, data);
+      showComments(e, data.id, data.author);
     }
   }
 
-  const showComments = async (e: OnClick, data: Rates) => {
-    const id = data.id || '';
-    const cmt = await commentService.getComments(id, String(data.author));
+  const showComments = async (e: OnClick, id: string, author: string) => {
+    const cmt = await commentService.getComments(id, author);
     setComment(cmt);
   }
 
@@ -107,7 +106,7 @@ export const RateItem = ({ data, maxLengthReviewText, resource, load, reactionSe
       await commentService.updateComment(id, author, userId, commentId, newComment);
       setIsModalOpen(false);
       setShowActions(false);
-      showComments(e, comment);
+      showComments(e, id, author);
     }
   }
 
@@ -119,7 +118,7 @@ export const RateItem = ({ data, maxLengthReviewText, resource, load, reactionSe
       if (res > 0) {
         storage.message("Removed successfully!")
         setShowActions(false);
-        showComments(e, comment);
+        showComments(e, id, author);
         setCommentCount(commentCount - 1);
       }
     })
@@ -177,7 +176,7 @@ export const RateItem = ({ data, maxLengthReviewText, resource, load, reactionSe
                 <span
                   className="btn-reply"
                   onClick={(e) => {
-                    showComments(e, data);
+                    showComments(e, data.id, data.author);
                     setIsShowComment(!isShowComment);
                   }}
                 >

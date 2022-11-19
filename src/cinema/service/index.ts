@@ -9,8 +9,8 @@ import { LocationService } from './location/location';
 import { MasterDataClient, MasterDataService } from './master-data';
 
 import { CinemaClient, CinemaService } from './cinema';
-import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService, SearchRateClient, SearchRateService } from "../../review";
-
+import { RatesClient } from 'web-clients';
+import {CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService, SearchRateService } from "reaction-client"
 export * from './cinema';
 export * from './category';
 
@@ -71,7 +71,7 @@ class ApplicationContext {
   getCinemaSearchRateService(): SearchRateService {
     if (!this.searchRateService) {
       const c = this.getConfig();
-      this.searchRateService = new SearchRateClient(httpRequest, c.cinema_rate_url);
+      this.searchRateService = new RatesClient(httpRequest, c.cinema_rate_url, false, true);
     }
     return this.searchRateService;
   }
@@ -91,7 +91,6 @@ class ApplicationContext {
     }
     return this.commentService;
   }
-
   getFilmService(): FilmService {
     if (!this.filmService) {
       const c = this.getConfig();
@@ -145,7 +144,6 @@ export function useCinemaReaction(): ReactionService {
 export function useCinemaComment(): CommentService {
   return context.getCinemaCommentService();
 }
-
 export function useCategory(): CategoryService {
   return context.getCategoryService();
 }

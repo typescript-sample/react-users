@@ -48,6 +48,7 @@ export const TextEditorComponent: React.FC<{
 
   const initDoc = () => {
     // sDefTxt = oDoc.current.innerHTML;
+    oDoc.current.contentEditable = true;
     if (switchMode.current.checked) {
       setDocMode();
     }

@@ -3,7 +3,9 @@ import ReactModal from "react-modal";
 import { inputSearch, storage } from "uione";
 import { PageSizeSelect, SearchComponentState, useSearch } from "react-hook-core";
 
-import { Rate, RateFilter, RateService, ReactionService, CommentService, SearchRateService } from "./client";
+import { Rate, RateFilter, ShortRate} from "web-clients";
+import {RateService, SearchRateService} from "reaction-client"
+import{ ReactionService, CommentService} from "reaction-client"
 import { Sort } from "./sort";
 import { DataPostRate, PostRateForm } from "./postRate";
 import { ReviewScore } from "reactx-rate";
@@ -73,7 +75,7 @@ export const Review = ({ i, get, id, userId, user,rateRange, rateService, search
       if (!userId || !i) {
         return storage.alert("Please sign in to review");
       }
-      const rate: Rate = {
+      const rate: ShortRate = {
         rate: data.rate,
         review: data.review,
         time: new Date(),

@@ -4,7 +4,8 @@ import { StringMap, storage, handleError } from "uione";
 import { OnClick } from "react-hook-core";
 import like from "../assets/images/like.svg";
 import likeFilled from "../assets/images/like_filled.svg";
-import { Rate, Comment, ReactionService, CommentService } from "./client";
+import { Rate } from "web-clients";
+import {Comment, ReactionService, CommentService} from "reaction-client"
 import { CommentItem } from "./commentItem";
 import "../rate.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -34,8 +35,9 @@ export const RateItem = ({ id, userId, user, data, resource, disable, rateRange,
   const [more, setMore] = useState(false);
   const maxLengthReviewText = 300;
   useEffect(()=>{
-    commentService.search(id, data.author ?? "").then(res=>{
-      setComments(res.list);
+    commentService.getComments(id,data.author ?? "")
+    .then(res=>{
+      setComments(res);
     })
   },[])
   const renderReviewStar = (value: any) => {

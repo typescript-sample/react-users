@@ -2,7 +2,7 @@ import moment from "moment";
 import { useState } from "react";
 import { faUserCircle, faPencil, faEllipsisVertical, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Comment, CommentReactionService } from "./client";
+import { Comment, CommentReactionService } from "reaction-client";
 import "../rate.css";
 import { CommentThreadReply } from "./client/commentthreadreply";
 import { handleError, storage } from "uione";

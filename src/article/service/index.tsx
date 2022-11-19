@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { HttpRequest } from 'axios-core';
 import { options, storage } from 'uione';
+import { RatesClient } from 'web-clients';
 import { MasterDataClient, MasterDataService } from '../master-data';
 import { ArticleClient, ArticleService } from './article';
-import { CommentClient, CommentService, CommentThreadClient, CommentThreadService, CommentThreadReplyClient, CommentThreadReplyService, RateClient, RateService, ReactionClient, ReactionService, CommentReactionService, CommentReactionClient, SearchRateService, SearchRateClient } from "../../review";
+import { CommentThreadClient, CommentThreadService, CommentThreadReplyClient, CommentThreadReplyService } from "../../review";
+import{CommentClient, CommentService,  RateClient, RateService, ReactionClient, ReactionService,CommentReactionService, CommentReactionClient, SearchRateService} from 'reaction-client'
+
 export * from './article';
 
 // axios.defaults.withCredentials = true;
@@ -61,7 +64,7 @@ class ApplicationContext {
   getArticleSearchRateService(): SearchRateService {
     if (!this.searchRateService) {
       const c = this.getConfig();
-      this.searchRateService = new SearchRateClient(httpRequest, c.article_rate_url);
+      this.searchRateService = new RatesClient(httpRequest, c.article_rate_url, false, true);
     }
     return this.searchRateService;
   }
@@ -81,6 +84,7 @@ class ApplicationContext {
     }
     return this.commentService;
   }
+
   getArticleCommentThreadService(): CommentThreadService {
     if (!this.commentThreadService) {
       const c = this.getConfig();
@@ -137,6 +141,7 @@ export function useArticleReaction(): ReactionService {
 export function useArticleComment(): CommentService {
   return context.getArticleCommentService();
 }
+
 export function useArticleCommentThread(): CommentThreadService {
   return context.getArticleCommentThreadService();
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { storage } from 'uione';
-import { Comment } from '../review';
+import { Comment } from 'reaction-client';
 import moment from 'moment';
 import ReactModal from 'react-modal';
 import '../rate.css';

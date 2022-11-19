@@ -1,5 +1,5 @@
 
-import { Rate } from "../review";
+import { Rate } from "web-clients";
 import { RateItem } from "../review/rateItem";
 
 export interface Props {
@@ -21,11 +21,11 @@ export const Review = (props: Props) => {
       <ul className="row list-view">
         {list &&
           list.length > 0 &&
-          list.map((i: any,index) => {
+          list.map((i: any) => {
             return (
               <RateItem
                 user={user}
-                key={index}
+                key={i.time}
                 id={id}
                 userId={userId}
                 rateRange={rateRange}

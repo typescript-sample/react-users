@@ -10,7 +10,7 @@ import { CommentItem } from "./commentItem";
 import { CommentThreadReply, CommentThreadReplyService } from "./client/commentthreadreply";
 import like from "../assets/images/like.svg";
 import likeFilled from "../assets/images/like_filled.svg";
-import { CommentReactionService } from "./client";
+import { CommentReactionService } from "reaction-client";
 
 export interface Props {
   disable: boolean

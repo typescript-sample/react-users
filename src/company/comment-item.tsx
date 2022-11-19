@@ -1,6 +1,6 @@
 import { faEllipsisVertical, faPencil, faTrash, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Comment } from '../review';
+import { Comment } from 'reaction-client';
 import { PostCommentForm } from './post-comment-form';
 import { useState } from 'react';
 import moment from 'moment';

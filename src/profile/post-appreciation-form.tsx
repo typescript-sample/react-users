@@ -2,10 +2,9 @@ import React, { useMemo, useState } from 'react';
 import { buildId } from 'react-hook-core';
 import { useParams } from 'react-router-dom';
 import { storage } from 'uione';
-import { Comment } from '../review';
+import { Comment } from 'reaction-client';
 import { useReplyService, useAppreciation, useAppreciationComment } from './service';
 import { Appreciation } from './service/appreciation';
-import { Reply } from './service/appreciation-reply';
 
 interface Props {
   closeModal: () => void;

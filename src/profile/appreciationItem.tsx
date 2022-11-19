@@ -4,8 +4,9 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { Appreciation } from "./service/appreciation";
 import "../rate.css";
-import { handleAppend, OnClick } from "react-hook-core";
-import { Comment, CommentItem, Rate } from "../review";
+import { OnClick } from "react-hook-core";
+import {Comment} from 'reaction-client'
+import { CommentItem } from "../review";
 import { storage } from "uione";
 import { useAppreciationComment } from "./service";
 import ReactModal from "react-modal";
@@ -22,7 +23,7 @@ export interface Props {
 }
 
 export const AppreciationItem = (props: Props) => {
-  const { id, userId, data, resource , setIsOpenModal, setIsEdit, isEdit} = props;
+  const { id, userId, data, resource , setIsEdit} = props;
   const [more, setMore] = useState<boolean>(false);
   const maxLengthReviewText = 300;
   const [isShowComment, setIsShowComment] = useState<boolean>(false);
@@ -58,13 +59,12 @@ export const AppreciationItem = (props: Props) => {
     }
   };
 
-  const loadComments = async (e: OnClick, data: Rate) => {
-    const cmt = await commentService.search(id, String(data.author));
-    setComment(cmt.list);
+  const loadComments = async (e: OnClick, id: string, author: string) => {
+    const cmt = await commentService.getComments(id, author);
+    setComment(cmt);
   };
 
-  const createComment = async (e: OnClick, rate: Rate, input: any) => {
-    const author = rate.author || "";
+  const createComment = async (e: OnClick, author: string, input: any) => {
     if (!userId) {
       return storage.alert("You must sign in");
     }
@@ -79,12 +79,12 @@ export const AppreciationItem = (props: Props) => {
       setCommentCount(commentCount + 1);
       setIsReplies(false);
       setIsShowComment(true);
-      loadComments(e, data);
+      loadComments(e, id, data.author);
     }
   };
 
   const updateComment = async (e: OnClick, input: any, comment: Comment) => {
-    if (comment.userId !== userId) {
+    if (comment.userId !== userId ) {
       return storage.alert("...");
     } else {
       const commentId = comment.commentId || "";
@@ -94,20 +94,25 @@ export const AppreciationItem = (props: Props) => {
         time: new Date(),
       };
       await commentService.updateComment(id, author, userId, commentId, newComment);
-      loadComments(e, comment);
+        loadComments(e, commentId, author);
+
     }
   };
 
-  const removeComment = async (e: OnClick, comment: Comment) => {
-    const commentId = comment.commentId || "";
-    const author = comment.author || "";
-    await commentService.removeComment(id, author, commentId).then((res: any) => {
-      if (res > 0) {
-        storage.message("Removed successfully!");
-        setCommentCount(commentCount - 1);
-        loadComments(e, comment);
-      }
-    });
+  // const removeComment = async (e: OnClick, comment: Comment) => {
+  const removeComment = async (e: OnClick, id:string, author:string, commentId:string) => {
+    if (commentId.length>0 && author.length>0){
+      await commentService.removeComment(id, author, commentId).then((res: any) => {
+        if (res > 0) {
+          storage.message("Removed successfully!");
+          setCommentCount(commentCount - 1);
+          loadComments(e,id,author);
+        }
+      });
+    }else{
+      storage.alert("Error")
+    }
+    
   };
 
   const handleEdit = () => {
@@ -158,7 +163,7 @@ export const AppreciationItem = (props: Props) => {
                   <span
                     className="btn-reply"
                     onClick={(e) => {
-                      loadComments(e, data);
+                      loadComments(e, data.id,data.author);
                       setIsShowComment(!isShowComment);
                     }}
                   >
@@ -210,7 +215,7 @@ export const AppreciationItem = (props: Props) => {
                   </span>
                   <span
                     className={input.length > 0 ? "btn-post value" : "btn-post"}
-                    onClick={(e) => createComment(e, data, input)}
+                    onClick={(e) => createComment(e, data.author, input)}
                   >
                     Post
                   </span>

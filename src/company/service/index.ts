@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { HttpRequest } from 'axios-core';
 import { options, storage } from 'uione';
-import { CommentClient, CommentService, ReactionClient, ReactionService } from '../../review';
+import { CommentClient, CommentService, ReactionClient, ReactionService } from 'reaction-client';
 import { CompanyCategoryClient, CompanyCategoryService } from './category';
 import { CompanyClient, CompanyService } from './company';
 import { RatesClient, RatesService } from './rate';

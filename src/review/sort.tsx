@@ -1,5 +1,5 @@
 import { Searchable } from "react-hook-core";
-import { Rate } from "./client";
+import { Rate } from "web-clients";
 
 interface Props {
   doSearch: (se: Searchable<Rate>, isFirstLoad?: boolean | undefined) => void;

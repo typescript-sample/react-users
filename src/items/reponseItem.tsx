@@ -6,7 +6,7 @@ import { OnClick } from "react-hook-core";
 import like from "../assets/images/like.svg";
 import likeFilled from "../assets/images/like_filled.svg";
 import { Response } from "./service/response/index";
-import { Comment, ReactionService, CommentService } from "../review";
+import { Comment, ReactionService, CommentService } from "reaction-client";
 import { CommentItem } from "../review";
 
 

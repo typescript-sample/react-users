@@ -6,8 +6,8 @@ import { FollowClient, FollowService } from "./follow";
 import { LocationClient } from "./location";
 import { LocationService } from "./location/location";
 import { SavedItemClient, SavedItemService } from "./saved-location";
-import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService, SearchRateClient, SearchRateService } from "../../review";
-
+import { RatesClient } from 'web-clients';
+import {CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService, SearchRateService} from "reaction-client"
 export * from "./location";
 
 const httpRequest = new HttpRequest(axios, options);
@@ -26,7 +26,6 @@ class ApplicationContext {
   searchRateService?:SearchRateService;
   reactionService?: ReactionService;
   commentService?: CommentService;
-
   constructor() {
     this.getConfig = this.getConfig.bind(this);
     this.getLocationService = this.getLocationService.bind(this);
@@ -71,7 +70,7 @@ class ApplicationContext {
   getLocationSearchRateService(): SearchRateService {
     if (!this.searchRateService) {
       const c = this.getConfig();
-      this.searchRateService = new SearchRateClient(httpRequest, c.location_rate_url);
+      this.searchRateService = new RatesClient(httpRequest, c.location_rate_url, false, true);
     }
     return this.searchRateService;
   }

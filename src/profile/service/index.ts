@@ -2,7 +2,8 @@ import axios from 'axios';
 import { HttpRequest } from 'axios-core';
 import { useEffect, useState } from 'react';
 import { options, storage } from 'uione';
-import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService, SearchRateClient, SearchRateService } from '../../review';
+import { RatesClient } from 'web-clients';
+import { CommentClient, CommentService, RateClient, RateService, ReactionClient, ReactionService, SearchRateService } from "reaction-client"
 import { AppreciationClient, AppreciationService } from './appreciation';
 import { ReplyClient, ReplyService } from './appreciation-reply';
 import { FollowService, FollowClient } from './follow';
@@ -26,11 +27,13 @@ class ApplicationContext {
   appreciationReplyService?: ReplyService;
   followService?: FollowService
   rateService?: RateService;
-  searchRateService?:SearchRateService;
+  searchRateService?: SearchRateService;
   reactionService?: ReactionService;
   commentService?: CommentService;
   reactService?: ReactService;
-  
+  appreciationCommentService?:CommentService;
+  appreciationReactionService?:ReactionService;
+
 
 
   constructor() {
@@ -84,10 +87,10 @@ class ApplicationContext {
     }
     return this.rateService;
   }
-  getUserSearchRateService():SearchRateService{
-    if(!this.searchRateService){
+  getUserSearchRateService(): SearchRateService {
+    if (!this.searchRateService) {
       const c = this.getConfig();
-      this.searchRateService = new SearchRateClient(httpRequest, c.user_rate_url);
+      this.searchRateService = new RatesClient(httpRequest, c.user_rate_url, false, true);
     }
     return this.searchRateService
   }
@@ -117,16 +120,16 @@ class ApplicationContext {
   //
   getAppreciationCommentService(): CommentService {
     const c = this.getConfig();
-    const appreciationCommentService = new CommentClient(httpRequest, c.appreciation_url);
-    return appreciationCommentService;
-  }
-
-  getAppreciationReactionService(): ReactionService {
-    const c = this.getConfig();
-    const appreciationReactionService = new ReactionClient(httpRequest, c.appreciation_url);
-    return appreciationReactionService;
+    this.appreciationCommentService = new CommentClient(httpRequest, c.appreciation_url);
+    return this.appreciationCommentService;
   }
   
+  getAppreciationReactionService(): ReactionService {
+    const c = this.getConfig();
+    this.appreciationReactionService = new ReactionClient(httpRequest, c.appreciation_url);
+    return this.appreciationReactionService;
+  }
+
 }
 
 export const appContext = new ApplicationContext();
@@ -165,6 +168,7 @@ export function useReplyService(): ReplyService | undefined {
   return context;
 }
 
+
 export function useAppreciationComment(): CommentService {
   return appContext.getAppreciationCommentService();
 }
@@ -177,7 +181,7 @@ export function useFollowUserResponse(): FollowService {
 export function useUserRate(): RateService {
   return appContext.getUserRateService();
 }
-export function useUserSearchRate():SearchRateService{
+export function useUserSearchRate(): SearchRateService {
   return appContext.getUserSearchRateService();
 }
 export function useUserReaction(): ReactionService {

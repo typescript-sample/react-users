@@ -4,7 +4,8 @@ import { inputSearch, storage } from "uione";
 import { DataPostResponse, PostResponseForm } from "./postResponse";
 import { Response, ResponseFilter } from "./service/response";
 import { PageSizeSelect, SearchComponentState, useSearch } from "react-hook-core";
-import { CommentService, ReactionService, Sort } from "../review";
+import {  Sort } from "../review";
+import{CommentService, ReactionService} from "reaction-client"
 import { ResponseItem } from "./reponseItem";
 import "./item.css";
 import { ResponseService } from "./service/response";
