@@ -8352,10 +8352,10 @@
   dependencies:
     "loose-envify" "^1.1.0"
 
-"reaction-client@^0.1.0":
-  "integrity" "sha512-GTPXq0yHY/sW1+AhD/vzEKBMS3W41g6JFNE26Dh7pyqdH62xmy1s9Dt3r1/bqAD+HW+xorXPSxAkcueS3yOAdg=="
-  "resolved" "https://registry.npmjs.org/reaction-client/-/reaction-client-0.1.0.tgz"
-  "version" "0.1.0"
+"reaction-client@^0.1.1":
+  "integrity" "sha512-B7cUHnSNAHS3rSR9tkB0JkheHUNIuAMWDEax/9hIdEl4FYaSjvgSqOLtYLb77ojNlF5Y9+AQu81PcVJu0rEBzA=="
+  "resolved" "https://registry.npmjs.org/reaction-client/-/reaction-client-0.1.1.tgz"
+  "version" "0.1.1"
 
 "reactx-carousel@0.0.1":
   "integrity" "sha512-xxVVSLkFIiISwS8pJzLj8ukslGbXRaFqYUPXrv+C2F9Hz+wtQ4LnbAS2Oj+GU7iEQphtkm6Ud9uBjRMTamGe0Q=="
@@ -9728,10 +9728,10 @@
   dependencies:
     "minimalistic-assert" "^1.0.0"
 
-"web-clients@^0.1.25":
-  "integrity" "sha512-vtlXP+6mzWiIye+tspp+ccWFh+Ds6CG0Z/x1MzsV1bJ1mjnVnPZGkU895w7n+UDli5kPfh0eqPJDffCNxUWJug=="
-  "resolved" "https://registry.npmjs.org/web-clients/-/web-clients-0.1.25.tgz"
-  "version" "0.1.25"
+"web-clients@^0.1.27":
+  "integrity" "sha512-OJ1dlJzRWTAbBrJhxHy9CNCNMqiMBWYl1jHdnhtiqvog/vX8mjE/bBpuvwLxkvRHesfsSQxL9tB20+7xulroiw=="
+  "resolved" "https://registry.npmjs.org/web-clients/-/web-clients-0.1.27.tgz"
+  "version" "0.1.27"
 
 "web-vitals@^2.1.4":
   "integrity" "sha512-sVWcwhU5mX6crfI5Vd2dC4qchyTqxV8URinzt25XqVh+bHEPGH4C3NPrNionCP7Obx59wrYEbNlw4Z8sjALzZg=="

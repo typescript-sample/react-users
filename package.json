@@ -52,7 +52,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "react-uuid": "^1.0.2",
-    "reaction-client": "^0.1.0",
+    "reaction-client": "^0.1.1",
     "reactx-carousel": "0.0.1",
     "reactx-nav": "^0.1.4",
     "reactx-pagination": "0.0.1",
@@ -71,7 +71,7 @@
     "uione": "0.0.21",
     "uuid": "^8.3.2",
     "validation-core": "^0.0.3",
-    "web-clients": "^0.1.25",
+    "web-clients": "^0.1.27",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
