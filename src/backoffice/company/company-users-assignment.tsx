@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { buildId, DispatchWithCallback, error } from 'react-hook-core'
 import { confirm, handleError, showAlert, showMessage, storage, StringMap, useResource } from 'uione'
-import { User, getUserService } from '../admin/service'
+import { User, getUserService } from '../../admin/service'
 import { Company, getCompanyService } from './service'
-import { UsersLookup } from '../admin/users-lookup'
-import femaleIcon from '../assets/images/female.png'
-import maleIcon from '../assets/images/male.png'
+import { UsersLookup } from '../../admin/users-lookup'
+import femaleIcon from '../../assets/images/female.png'
+import maleIcon from '../../assets/images/male.png'
 
 interface InternalState {
   company: Company

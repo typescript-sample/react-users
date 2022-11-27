@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Pagination } from 'reactx-pagination';
 import { inputSearch } from 'uione';
-import { Company, CompanyFilter, useCompanyService } from './service';
+import { Company, CompanyFilter, getCompanyService } from './service';
 
 interface CompanySearch extends SearchComponentState<Company, CompanyFilter> {
 
@@ -34,7 +34,7 @@ export const CompaniesFormClient = () => {
     return value(state.filter);
   };
   const p = { getFilter };
-  const { state, resource, component, updateState, search, sort, setState, toggleFilter, clearQ, changeView, pageChanged, pageSizeChanged } = useSearch<Company, CompanyFilter, CompanySearch>(refForm, initialState, useCompanyService(), inputSearch(), p);
+  const { state, resource, component, updateState, search, sort, setState, toggleFilter, clearQ, changeView, pageChanged, pageSizeChanged } = useSearch<Company, CompanyFilter, CompanySearch>(refForm, initialState, getCompanyService(), inputSearch(), p);
   const edit = (e: OnClick, id: string) => {
     e.preventDefault();
     navigate(`${id}`);

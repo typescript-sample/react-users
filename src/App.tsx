@@ -50,9 +50,9 @@ import { CinemaPage } from "./cinema/cinema-page";
 import { BCinemasForm } from "./backoffice/cinema/cinemas-form";
 import { BCinemaForm } from "./backoffice/cinema/cinema-form";
 
-import { CompaniesForm } from "./backoffice-company/companies-form";
-import { CompanyForm } from "./backoffice-company/company-form";
-import { CompanyUsersAssignment } from "./backoffice-company/company-users-assignment";
+import { CompaniesForm } from "./backoffice/company/companies-form";
+import { CompanyForm } from "./backoffice/company/company-form";
+import { CompanyUsersAssignment } from "./backoffice/company/company-users-assignment";
 import { CompaniesFormClient } from "./company/companies-form";
 import { CompanyFormClient } from "./company/company-page";
 
@@ -70,8 +70,8 @@ import { MyItemForm } from "./my-items/my-item-form";
 import { ItemsForm } from "./items/items-form";
 import { ItemView } from "./items/item-view";
 
-import { BJobsForm } from './backoffice-job/jobs-form'
-import { BJobForm } from './backoffice-job/job-form'
+import { BJobsForm } from './backoffice/job/jobs-form'
+import { BJobForm } from './backoffice/job/job-form'
 import { JobsForm } from './jobs/jobs-form'
 import { JobForm } from './jobs/job-form'
 import { JobPage } from './jobs/job-page'
@@ -120,7 +120,7 @@ import { MusicForm } from "./music/music-form";
 import { FilmUpload } from "./backoffice/film/filmupload";
 import { LocationUpload } from "./backoffice/location/location-upload";
 import { CinemaUpload } from "./backoffice/cinema/cinema-upload";
-import { CompanyUpload } from "./backoffice-company/company-upload";
+import { CompanyUpload } from "./backoffice/company/company-upload";
 import { LoveSongForm } from "./music/love-song-form";
 import { PlaylistForm } from "./music/playlist-form";
 import { DetailPlaylist } from "./music/detail-playlist";

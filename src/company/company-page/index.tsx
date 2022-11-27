@@ -1,4 +1,4 @@
-import { Company, useCompanyService } from '../service';
+import { Company, getCompanyService } from '../service';
 import { Link, useParams } from "react-router-dom";
 import { Overview } from "./overview";
 import { ReviewPage } from "./review";
@@ -11,7 +11,7 @@ export const CompanyFormClient = () => {
   const { id = '' } = useParams();
   const refForm = useRef();
   const [company, setCompany] = useState<Company>()
-  const companyService = useCompanyService();
+  const companyService = getCompanyService();
   const [uploadedCover, setUploadedCover] = useState<string>();
   const [uploadedAvatar, setUploadedAvatar] = useState<string>();
   

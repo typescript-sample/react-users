@@ -1,6 +1,6 @@
 import { Attributes, Filter, Service, Tracking, NumberRange } from 'onecore'
 import { FileInfo } from 'reactx-upload'
-import { UploadSerivce } from '../../../backoffice/upload-form'
+import { UploadSerivce } from '../../../upload-form'
 
 export interface CompanyFilter extends Filter {
   id?: string

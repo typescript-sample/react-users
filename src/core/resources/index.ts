@@ -5,6 +5,8 @@ import {en as authenticationEN} from './authentication/en';
 import {vi as authenticationVI} from './authentication/vi';
 import {l10n as backofficeCompanyEN} from './backoffice-company/en';
 import {l10n as backofficeCompanyVI} from './backoffice-company/vi';
+import {l10n as backofficeJobEN} from './backoffice-job/en';
+import {l10n as backofficeJobVI} from './backoffice-job/vi';
 import {en as myprofileEN} from './my-profile/en';
 import {vi as myprofileVI} from './my-profile/vi';
 
@@ -15,6 +17,7 @@ const en: StringMap = {
   ...commonEN,
   ...authenticationEN,
   ...backofficeCompanyEN,
+  ...backofficeJobEN,
   ...adminEN,
   ...myprofileEN
 };
@@ -22,6 +25,7 @@ const vi: StringMap = {
   ...commonVI,
   ...authenticationVI,
   ...backofficeCompanyVI,
+  ...backofficeJobVI,
   ...adminVI,
   ...myprofileVI
 };

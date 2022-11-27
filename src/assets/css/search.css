@@ -1,3 +1,8 @@
+.search-input > *:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .view-container > form > div > label.search-input,
 .view-container > div > label.search-input,
 .view-body > label.search-input,
