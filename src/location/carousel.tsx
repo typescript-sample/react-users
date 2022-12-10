@@ -10,8 +10,12 @@ import {SavedLocation} from './savedLocation'
 interface Props {
   edit: (e: any, id: string) => void;
   location: Location;
+  isChecked:boolean;
+  // savedList:any
 }
-export default function LocationCarousel({ edit, location }: Props) {
+export default function LocationCarousel({ edit, location,isChecked }: Props) { 
+  const [isLocationChecked, setLocationChecked] = useState(isChecked)
+  
   const [carousel, setCarousel] = useState(false);
   const [files, setFiles] = useState<FileInfo[]>();
   useEffect(() => {
@@ -120,7 +124,7 @@ export default function LocationCarousel({ edit, location }: Props) {
             bottom:'0px',
             right:'50px'
           }}>
-            <SavedLocation idItem={location.id} />
+            <SavedLocation idItem={location.id} isChecked={isLocationChecked} />
           </div>
             <div
               className='cover'

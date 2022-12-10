@@ -4,7 +4,7 @@ import { faUserCircle, faPencil, faEllipsisVertical, faTrash } from "@fortawesom
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Comment, CommentReactionService } from "reaction-client";
 import "../rate.css";
-import { CommentThreadReply } from "./client/commentthreadreply";
+import {Comment as CommentThreadReply } from "./client/comment";
 import { handleError, storage } from "uione";
 import { OnClick } from "react-hook-core";
 import like from "../assets/images/like.svg";

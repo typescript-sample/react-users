@@ -79,7 +79,7 @@ export const MyLocation = () => {
               {list &&
                 list.length > 0 &&
                 list.map((location, i) => (
-                  <LocationCarousel location={location} edit={edit} />
+                  <LocationCarousel location={location} edit={edit} isChecked={true} />
                 ))}
             </ul>
           ) : (

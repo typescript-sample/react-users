@@ -7,10 +7,12 @@ import "../rate.css";
 import { OnClick } from "react-hook-core";
 import { CommentThread, CommentThreadService } from "./client/commentthread";
 import { CommentItem } from "./commentItem";
-import { CommentThreadReply, CommentThreadReplyService } from "./client/commentthreadreply";
+import { Comment, CommentService } from "./client/comment";
 import like from "../assets/images/like.svg";
 import likeFilled from "../assets/images/like_filled.svg";
 import { CommentReactionService } from "reaction-client";
+
+
 
 export interface Props {
   disable: boolean
@@ -18,7 +20,7 @@ export interface Props {
   data: CommentThread
   id: string
   commentThreadService: CommentThreadService
-  commentThreadReplyService: CommentThreadReplyService
+  commentThreadReplyService: CommentService
   commentThreadReactionService: CommentReactionService
   commentReactionService: CommentReactionService
   resource: StringMap
@@ -36,11 +38,12 @@ export const CommentThreadItem = ({ disable = false, resource, id, data, comment
   const [isReply, setShowReply] = useState(false)
   const [input, setInput] = useState("")
   const [replyCount, setReplyCount] = useState(data.replyCount || 0)
-  const [replycomments, setReplyComments] = useState<CommentThreadReply[]>([])
+  const [replycomments, setReplyComments] = useState<Comment[]>([])
   const [isDisable, setIsDisable] = useState<boolean>(disable)
   const [likeCount, setLikeCount] = useState<number>(data.usefulCount || 0);
   useEffect(() => {
-    commentThreadReplyService.getReplyComments(data.commentId, userId).then(res => {
+    
+    data.commentId && commentThreadReplyService.getComments(data.commentId, userId).then(res => {
       setReplyComments(res)
     })
   }, [])
@@ -69,7 +72,7 @@ export const CommentThreadItem = ({ disable = false, resource, id, data, comment
 
   const removeReplyComment = async (e: OnClick, commentThreadId: string, commentId: string) => {
     e.preventDefault()
-    const res = await commentThreadReplyService.removeComment(commentThreadId, commentId)
+    const res = await commentThreadReplyService.delete(commentThreadId, commentId)
     if (res <= 0) {
       return storage.alert("error")
     }
@@ -83,14 +86,17 @@ export const CommentThreadItem = ({ disable = false, resource, id, data, comment
   const createComment = async (e: OnClick, input: string, parent?: string) => {
     e.preventDefault()
 
-    const comment: CommentThreadReply = {
+    const comment: Comment = {
       comment: input,
       time: new Date(),
       parent: parent,
       commentId: "",
       commentThreadId: data.commentId,
     }
-    return commentThreadReplyService.reply(id, userId, data.commentId, comment).then(res => {
+    if(!data.commentId){
+      return storage.alert("error");
+    }
+    return commentThreadReplyService.comment(id, userId, data.commentId, comment).then(res => {
       comment.commentId = res
       comment.userId = userId
       comment.author = userId
@@ -116,20 +122,20 @@ export const CommentThreadItem = ({ disable = false, resource, id, data, comment
     })
 
   }
-  const updateComment = async (e: OnClick, input: string, comment: CommentThreadReply) => {
+  const updateComment = async (e: OnClick, input: string, comment: Comment) => {
     if (comment.author !== userId) {
       return storage.alert("...");
     }
     if (comment.commentId == null || comment.commentId.length <= 0) {
       return storage.alert("...")
     }
-    const newComment: CommentThreadReply = {
+    const newComment: Comment = {
       commentId: comment.commentId,
       comment: input,
       updatedAt: new Date(),
     };
 
-    const res = await commentThreadReplyService.updateComment(comment.commentId, newComment);
+    const res = await commentThreadReplyService.update(comment.commentId, newComment);
     if (res <= 0) {
       return storage.alert("Error")
     }
@@ -144,6 +150,9 @@ export const CommentThreadItem = ({ disable = false, resource, id, data, comment
     const author = data.author || "";
     if (!userId) {
       return storage.alert("You must sign in");
+    }
+    if(!data.commentId){
+      return storage.alert("error");
     }
     commentThreadReactionService.setUseful(data.commentId, author, userId).then(res => {
       if (res <= 0) {
@@ -161,6 +170,9 @@ export const CommentThreadItem = ({ disable = false, resource, id, data, comment
     const author = data.author || "";
     if (!userId) {
       return storage.alert("You must sign in");
+    }
+    if(!data.commentId){
+      return storage.alert("error");
     }
     commentThreadReactionService.removeUseful(data.commentId, author, userId).then(res => {
       if (res <= 0) {
@@ -181,7 +193,7 @@ export const CommentThreadItem = ({ disable = false, resource, id, data, comment
         <div className="comments-container" style={{ justifyContent: "flex-start" }}>
           <div className="comments2" style={{ width: "100%" }}>
             <div className="avatar">
-              {data.authorURL ? <img src={data.authorURL ? data.authorURL : ""} alt="" className="img" /> : <FontAwesomeIcon icon={faUserCircle} size="3x" color="lightgrey" />}
+              {data.userURL ? <img src={data.userURL ? data.userURL : ""} alt="" className="img" /> : <FontAwesomeIcon icon={faUserCircle} size="3x" color="lightgrey" />}
             </div>
             <div className="content">
               <div className="header">
@@ -212,7 +224,7 @@ export const CommentThreadItem = ({ disable = false, resource, id, data, comment
                   </div>
                 </div>
               </div>) : (
-                <p className="comment">{formatReviewText(data.comment)}</p>
+                <p className="comment">{formatReviewText(data.comment||'')}</p>
               )}
               <div className="footer">
                 <div className="left">

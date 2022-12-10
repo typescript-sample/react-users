@@ -108,7 +108,7 @@ export const ResponseItem = ({ id, userId, data, resource, disable, reactionServ
         comment: input,
         time: new Date(),
       };
-      await commentService.updateComment(id, author, userId, commentId, newComment);
+      await commentService.update(id, author, userId, commentId, newComment);
       loadComments(e, comment);
     }
   };
@@ -116,7 +116,7 @@ export const ResponseItem = ({ id, userId, data, resource, disable, reactionServ
   const removeComment = async (e: OnClick, comment: Comment) => {
     const commentId = comment.commentId || "";
     const author = comment.author || "";
-    await commentService.removeComment(id, author, commentId).then((res: any) => {
+    await commentService.delete(id, author, commentId).then((res: any) => {
       if (res > 0) {
         storage.message("Removed successfully!");
         setCommentCount(commentCount - 1);

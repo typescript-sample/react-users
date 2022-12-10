@@ -93,7 +93,7 @@ export const AppreciationItem = (props: Props) => {
         comment: input,
         time: new Date(),
       };
-      await commentService.updateComment(id, author, userId, commentId, newComment);
+      await commentService.update(id, author, userId, commentId, newComment);
         loadComments(e, commentId, author);
 
     }
@@ -102,7 +102,7 @@ export const AppreciationItem = (props: Props) => {
   // const removeComment = async (e: OnClick, comment: Comment) => {
   const removeComment = async (e: OnClick, id:string, author:string, commentId:string) => {
     if (commentId.length>0 && author.length>0){
-      await commentService.removeComment(id, author, commentId).then((res: any) => {
+      await commentService.delete(id, author, commentId).then((res: any) => {
         if (res > 0) {
           storage.message("Removed successfully!");
           setCommentCount(commentCount - 1);

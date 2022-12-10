@@ -75,7 +75,7 @@ export const RateItem = ({ data, maxLengthReviewText, resource, load, reactionSe
       time: new Date(),
     };
     const rs = await commentService.comment(id, author, userId, comment);
-    if (rs === false) {
+    if (!rs) {
       return;
     } else {
       storage.message('Your review is submited');
@@ -103,7 +103,7 @@ export const RateItem = ({ data, maxLengthReviewText, resource, load, reactionSe
         comment: input,
         time: new Date(),
       };
-      await commentService.updateComment(id, author, userId, commentId, newComment);
+      await commentService.update(id, author, userId, commentId, newComment);
       setIsModalOpen(false);
       setShowActions(false);
       showComments(e, id, author);
@@ -114,7 +114,7 @@ export const RateItem = ({ data, maxLengthReviewText, resource, load, reactionSe
     const id = comment.id || '';
     const commentId = comment.commentId || '';
     const author = comment.author || '';
-    await commentService.removeComment(id, author, commentId).then(res => {
+    await commentService.delete(id, author, commentId).then(res => {
       if (res > 0) {
         storage.message("Removed successfully!")
         setShowActions(false);

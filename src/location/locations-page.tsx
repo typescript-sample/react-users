@@ -1,6 +1,7 @@
 import 'leaflet/dist/leaflet.css';
 import { ValueText } from 'onecore';
 import * as React from 'react';
+import { useState } from 'react';
 import {
   PageSizeSelect,
   SearchComponentState,
@@ -10,10 +11,10 @@ import {
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import { Pagination } from 'reactx-pagination';
-import { inputSearch } from 'uione';
+import { handleError, inputSearch, storage } from 'uione';
 import { LocationFilter } from '../backoffice/service/location/location';
 import LocationCarousel from './carousel';
-import { useLocationsService } from './service';
+import { useLocationsService, useSavedItemResponse } from './service';
 import { Location } from './service/location/location';
 
 interface LocationSearch
@@ -35,8 +36,11 @@ const initialState: LocationSearch = {
 export const LocationsPage = () => {
   const refForm = React.useRef();
   const navigate = useNavigate();
+  const savedItemService = useSavedItemResponse()
+  const [savedList, setSavedList] = useState<boolean[]>([])
   const {
     state,
+    setState,
     resource,
     component,
     updateState,
@@ -50,6 +54,7 @@ export const LocationsPage = () => {
     useLocationsService(),
     inputSearch()
   );
+
   component.viewable = true;
   component.editable = true;
   React.useEffect(() => {
@@ -64,6 +69,7 @@ export const LocationsPage = () => {
     });
   }, []);
 
+
   const edit = (e: React.MouseEvent<HTMLElement, MouseEvent>, id: string) => {
     e.preventDefault();
     navigate(`${id}`);
@@ -74,7 +80,21 @@ export const LocationsPage = () => {
     value(state.filter)
   );
   React.useEffect(() => {
-    if (state.list) { setList(state.list); }
+    if (state.list && state.list.length>0) {
+      const userId: string | undefined = storage.getUserId()
+      userId && savedItemService.getSavedItem(userId).then((result:any) => {
+        let newList:boolean[] = []
+        state.list && state.list.forEach(element => {
+          newList.push(result.some((item:any)=>item.id === element.id))
+        });
+        setSavedList(newList)
+      }).catch(err => {
+        handleError(err);
+        
+      })
+    }
+    state.list && setList(state.list)        
+
     if (state.filter) { setFilter(state.filter); }
   }, [state]);
 
@@ -86,7 +106,7 @@ export const LocationsPage = () => {
   return (
     <div className='view-container'>
       <header>
-        <h2>{resource.locations??"Locations"}</h2>
+        <h2>{resource.locations ?? "Locations"}</h2>
         <div className='btn-group'>
           {!viewList && (
             <button
@@ -178,13 +198,13 @@ export const LocationsPage = () => {
           </section>
         </form>
         <form className='list-result'>
-          
+
           {viewList ? (
             <ul className='row list-view 2'>
               {list &&
                 list.length > 0 &&
                 list.map((location, i) => (
-                  <LocationCarousel location={location} edit={edit} />
+                  <LocationCarousel key={location.id} location={location} edit={edit} isChecked={savedList[i]} />
                 ))}
             </ul>
           ) : (
@@ -206,7 +226,7 @@ export const LocationsPage = () => {
                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 />
-                {list &&
+                {list && list.length>0 &&
                   list.map((location, idx) => (
                     <Marker
                       key={`marker-${idx}`}
