@@ -154,7 +154,7 @@ export const RateItem = ({ id, userId, user, data, resource, disable, rateRange,
     
     const commentId = comment.commentId || "";
     const author = comment.author || "";
-    await commentService.removeComment(id, author, commentId).then((res: any) => {
+    await commentService.delete(id, author, commentId).then((res: any) => {
       if (res > 0) {
         storage.message("Removed successfully!");
         setCommentCount(commentCount - 1);

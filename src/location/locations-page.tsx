@@ -226,7 +226,7 @@ export const LocationsPage = () => {
                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 />
-                {list &&
+                {list && list.length>0 &&
                   list.map((location, idx) => (
                     <Marker
                       key={`marker-${idx}`}
