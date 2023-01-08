@@ -119,14 +119,18 @@ class ApplicationContext {
   }
   //
   getAppreciationCommentService(): CommentService {
-    const c = this.getConfig();
-    this.appreciationCommentService = new CommentClient(httpRequest, c.appreciation_url);
+    if(!this.appreciationCommentService){
+      const c = this.getConfig();
+      this.appreciationCommentService = new CommentClient(httpRequest, c.appreciation_url);
+    }
     return this.appreciationCommentService;
   }
   
   getAppreciationReactionService(): ReactionService {
-    const c = this.getConfig();
-    this.appreciationReactionService = new ReactionClient(httpRequest, c.appreciation_url);
+    if(!this.appreciationReactionService){
+      const c = this.getConfig();
+      this.appreciationReactionService = new ReactionClient(httpRequest, c.appreciation_url);
+    }
     return this.appreciationReactionService;
   }
 

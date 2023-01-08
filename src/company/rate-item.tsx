@@ -75,7 +75,7 @@ export const RateItem = ({ data, maxLengthReviewText, resource, load, reactionSe
       time: new Date(),
     };
     const rs = await commentService.comment(id, author, userId, comment);
-    if (rs === false) {
+    if (!rs) {
       return;
     } else {
       storage.message('Your review is submited');

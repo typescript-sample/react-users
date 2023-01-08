@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { HttpRequest } from 'axios-core';
 import { options, storage } from 'uione';
-import { RatesClient } from 'web-clients';
+import { CommentsClient, RatesClient } from 'web-clients';
 import { MasterDataClient, MasterDataService } from '../master-data';
 import { ArticleClient, ArticleService } from './article';
-import { CommentThreadClient, CommentThreadService, CommentThreadReplyClient, CommentThreadReplyService } from "../../review";
+import { CommentService as CommentThreadReplyService } from '../../review/client/comment/comment';
+// CommentService as CommentThreadReplyService
+import { CommentThreadClient, CommentThreadService,CommentClient as CommentThreadReplyClient, SearchCommentThreadService, CommentThreadFilter, CommentThread, commentThreadModel } from "../../review";
 import{CommentClient, CommentService,  RateClient, RateService, ReactionClient, ReactionService,CommentReactionService, CommentReactionClient, SearchRateService} from 'reaction-client'
 
 export * from './article';
@@ -31,6 +33,7 @@ class ApplicationContext {
   commentThreadReplyService?: CommentThreadReplyService;
   commentThreadReactionService?: CommentReactionService;
   commentReactionService?: CommentReactionService;
+  searchCommentThreadService?: SearchCommentThreadService;
   constructor() {
     this.getConfig = this.getConfig.bind(this);
   }
@@ -92,6 +95,14 @@ class ApplicationContext {
     }
     return this.commentThreadService;
   }
+  getSearchArticleCommentThreadService():SearchCommentThreadService{
+    if (!this.searchCommentThreadService) {
+      const c = this.getConfig();
+      this.searchCommentThreadService = new CommentsClient(httpRequest, c.article_comment_thread_url,false,true);
+    }
+    return this.searchCommentThreadService;
+    
+  }
   getArticleCommentThreadReplyService(): CommentThreadReplyService {
     if (!this.commentThreadReplyService) {
       const c = this.getConfig();
@@ -144,6 +155,9 @@ export function useArticleComment(): CommentService {
 
 export function useArticleCommentThread(): CommentThreadService {
   return context.getArticleCommentThreadService();
+}
+export function useSearchArticleCommentThread():SearchCommentThreadService{
+  return context.getSearchArticleCommentThreadService();
 }
 export function useArticleCommentThreadReply(): CommentThreadReplyService {
   return context.getArticleCommentThreadReplyService();

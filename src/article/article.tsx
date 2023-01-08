@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { RatingStar } from "reactx-rate";
-import { getResource, handleError, inputSearch, storage } from "uione";
+import { handleError, inputSearch, storage } from "uione";
 import { Rate, RateFilter, ShortRate } from "web-clients";
 import { DataPostRate, PostRateForm } from "../review/postRate";
 import {
-  OnClick,
   PageSizeSelect,
   SearchComponentState,
   useSearch,
@@ -22,6 +21,7 @@ import {
   useArticleRate,
   useArticleReaction,
   useArticleSearchRate,
+  useSearchArticleCommentThread,
 } from "./service";
 import { Sort } from "./sort";
 import { TextEditorComponent } from "./text-editor";
@@ -52,14 +52,13 @@ export const ArticleForm = () => {
   const user = storage.user();
   const { id = "" } = useParams();
   const navigate = useNavigate();
-  // const [rates, setRates] = useState<Rate[]>([]);
-  // const [commentThreads, setCommentThreads] = useState<CommentThread[]>([]);
   const articleService = useArticle();
   const rateService = useArticleRate();
   const rateSearchService = useArticleSearchRate();
   const reactionService = useArticleReaction();
   const commentService = useArticleComment();
   const commentThreadService = useArticleCommentThread();
+  const searchCommentThreadService = useSearchArticleCommentThread();
   const commentThreadReplyService = useArticleCommentThreadReply();
   const commentThreadReactionService = useArticleCommentThreadReaction();
   const commentRectionService = useArticleCommentReaction();
@@ -102,13 +101,6 @@ export const ArticleForm = () => {
       inputSearch()
     );
 
-  // const list = state.list || [];
-
-  // useEffect(() => {
-
-  //   setRates(list)
-  // }, [list]);
-
   state.filter = {
     ...state.filter,
     id: id,
@@ -129,9 +121,11 @@ export const ArticleForm = () => {
     };
     component.sortField = "time desc";
     rateSearchService.search(state.filter).then(res => {
-      // setRates(res.list);
       setState({ list: res.list })
-    }).catch(err => handleError(err));
+    }).catch(err =>{
+    
+      handleError(err)
+    });
 
   };
 
@@ -159,7 +153,7 @@ export const ArticleForm = () => {
         time: new Date(),
       };
       const res = await rateService.rate(id, userId, rate);
-      if (res == true) {
+      if (res === true) {
         storage.message("Your review is submited");
         setIsOpenRateModal(false);
         const newRate: Rate = {
@@ -177,8 +171,8 @@ export const ArticleForm = () => {
             : [newRate],
         });
       }
-    } catch (err) {
-      storage.alert("error");
+    } catch (err) {      
+      storage.alert("error ");
     }
   };
 
@@ -203,31 +197,28 @@ export const ArticleForm = () => {
       });
     }
   };
-
   const commentThreadSearch = useSearch<
     CommentThread,
     CommentThreadFilter,
     CommentThreadSearch
-  >(refForm, initialCommentThreadState, commentThreadService, inputSearch());
+  >(refForm, initialCommentThreadState, searchCommentThreadService, inputSearch());
 
   const loadCommentThread = async (sortBy: string, n?: number) => {
-    // commentThreadSearch.setState({
-    //   filter: {
-    //     id: id,
-    //     userId: userId,
-    //     sort: sortBy,
-    //     pageSize: n
-    //   }
-    // })
-
-    // commentThreadSearch.search(undefined)
-    const res = await commentThreadService.search({
-      id: id,
-      userId: userId,
-      sort: sortBy,
-      pageSize: n,
-    });
-    commentThreadSearch.setState({ list: res.list })
+    try {
+      const res = await searchCommentThreadService.search({
+        id: id,
+        userId: userId,
+        sort: sortBy,
+        pageSize: n,
+      });
+  
+      commentThreadSearch.setState({ list: res.list })
+    } catch (error) {
+      handleError(error)
+      console.log(error);
+      
+    }
+    
   };
 
   const postCommentThread = async (data: DataPostComment): Promise<void> => {
@@ -241,12 +232,12 @@ export const ArticleForm = () => {
         commentId: "",
         author: userId,
       };
-      const res = await commentThreadService.comment(id, userId, comment);
+      const res = await commentThreadService.comment(id, userId, data.comment);
       if (res && res.length > 0) {
         comment.replyCount = 0;
         comment.usefulCount = 0;
         comment.authorName = user && user.username ? user.username : undefined;
-        comment.authorURL = user && user.imageURL ? user.imageURL : undefined;
+        comment.userURL = user && user.imageURL ? user.imageURL : undefined;
         comment.commentId = res;
         comment.disable = false;
         let list = commentThreadSearch.state.list || [];

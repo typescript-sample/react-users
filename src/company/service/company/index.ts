@@ -7,7 +7,7 @@ export * from './company'
 export class CompanyClient extends Client<Company, string, CompanyFilter> implements CompanyService {
   constructor(http: HttpRequest, url: string) {
     super(http, url, companyModel)
-    this.searchGet = false
+    this.searchGet = true
     this.getCompany = this.getCompany.bind(this)
     this.getAllByUser = this.getAllByUser.bind(this)
   } // End of constructor

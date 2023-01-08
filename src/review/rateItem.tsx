@@ -37,7 +37,7 @@ export const RateItem = ({ id, userId, user, data, resource, disable, rateRange,
   useEffect(()=>{
     commentService.getComments(id,data.author ?? "")
     .then(res=>{
-      setComments(res);
+      setComments(res||[]);
     })
   },[])
   const renderReviewStar = (value: any) => {
@@ -103,8 +103,8 @@ export const RateItem = ({ id, userId, user, data, resource, disable, rateRange,
       comment: input,
       time: new Date(),
     };
-    const rs = await commentService.comment(id, author, userId, comment);
-    if (rs) {
+    try{
+    const rs = await commentService.comment(id, author, userId, comment);        
       storage.message("Your comment is submited");
       setInput("");
       setCommentCount(commentCount + 1);
@@ -112,9 +112,14 @@ export const RateItem = ({ id, userId, user, data, resource, disable, rateRange,
       setIsShowComment(true);
       comment.authorName = user.username
       comment.userId = userId
+      comment.commentId = rs
+      comment.author = author
+      console.log(comments);
+      
       setComments([...comments, comment])
-
-    }
+  }catch(e){
+    storage.alert("error")
+  }
   };
 
   const updateComment = async (e: OnClick, input: any, comment: Comment) => {
@@ -127,6 +132,7 @@ export const RateItem = ({ id, userId, user, data, resource, disable, rateRange,
         comment: input,
         time: new Date(),
       };
+      debugger
       commentService.updateComment(id, author, userId, commentId, newComment)
         .then((res) => {
           if (res <= 0) {
@@ -145,6 +151,7 @@ export const RateItem = ({ id, userId, user, data, resource, disable, rateRange,
   };
 
   const removeComment = async (e: OnClick, comment: Comment) => {
+    
     const commentId = comment.commentId || "";
     const author = comment.author || "";
     await commentService.removeComment(id, author, commentId).then((res: any) => {
